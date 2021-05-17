@@ -1,5 +1,5 @@
 //  Region Import External Lib (e.g React, Reactstrap, etc)
-import React, { useEffect, useState, useCallback, PureComponent } from 'react';
+import React, { useEffect, useState, useCallback, PureComponent, useRef	} from 'react';
 import { 
 	Col, 
 	Row, 
@@ -36,11 +36,17 @@ import {
 //  Region Import Assets
 
 //  Region Import Style
-
 //  Region Import Constants
 
-function Dataterkini() {
+// function usePrevious(value){
+// 	const ref = useRef();
+// 	useEffect(()=>{
+// 		ref.current = value;
+// 	});
+// 	return ref.current;
+// }
 
+function Dataterkini() {
 //  react Hooks (useEffect, etc)
 // const classes = useStyles();
 const dateFormat = 'DD/MM/YYYY';
@@ -48,29 +54,41 @@ const timeFormat = 'HH.mm.ss';
 const [data, setData]=useState([])
 const [dataHistory, setDataHistory]=useState([])
 const [time, setTime] = useState(moment())
-  // const [isOn, setValue] = useState(false)
+const [isOn, setValue] = useState(false)
+// let prevDataI = usePrevious(data.i)
 
-  const loadTime = useCallback(()=>{
-  	setTime(moment())
-  }, [setTime])
+const loadTime = useCallback(()=>{
+	setTime(moment())
+}, [setTime])
 
-  useEffect(() => {
-  	realtime.ref('DataTerkini').on('value', snapshot => {
-  		setData(snapshot.val())
-  		console.log(snapshot.val())
+useEffect(() => {
+	realtime.ref('DataTerkini').on('value', snapshot => {
+		setData(snapshot.val())
+		setValue(true)
       // getKoneksi()
   })
 
-  	realtime.ref('DataLog').on('value', snapshot => {
-  		setDataHistory(snapshot.val())
-  		console.log(snapshot.val())
+	realtime.ref('DataLog').on('value', snapshot => {
+		setDataHistory(snapshot.val())
+		console.log(snapshot.val())
       // getKoneksi()
   })
-  	setInterval(()=>{
-  		loadTime()
-  	}, 1000)
+	setInterval(()=>{
+		loadTime()
+	}, 1000)
 
-  }, [])
+	// setTimeout(()=>{
+	// 	if(prevDataI === data.i){
+	// 		setValue(false)
+	// 	}
+	// 	else if (prevDataI !== data.i){
+	// 		setValue(true)
+	// 	}
+	// }, 2000)
+
+
+
+}, [])
 
 //  Function declaration (handle, onchange, etc)
 const datagrafik = [
@@ -101,6 +119,7 @@ const datagrafik = [
 	prediksi: 2400,
 },
 ];
+
 
 return (
 	<>
