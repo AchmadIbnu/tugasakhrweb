@@ -70,12 +70,12 @@ const data = [
 {
 	name: "Sabtu",
 	kWh: 2000,
-	prediksi: 2200,
+	prediksi: 2500,
 },
 {
 	name: "Minggu",
 	kWh: 4000,
-	prediksi: 3800,
+	prediksi: 2600,
 },
 ];
 

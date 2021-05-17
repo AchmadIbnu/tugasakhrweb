@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="30mm"
+   height="10mm"
+   viewBox="0 0 30 10"
+   version="1.1"
+   id="svg140"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="koneksioff.svg">
+  <defs
+     id="defs134" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="229.21788"
+     inkscape:cy="66.420971"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1267"
+     inkscape:window-height="728"
+     inkscape:window-x="238"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     width="30mm" />
+  <metadata
+     id="metadata137">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g38"
+       transform="matrix(0.00996576,0,0,0.01017727,-1.0431952,0.05771557)"
+       style="fill:#ff0000">
+      <g
+         id="g6"
+         style="fill:#ff0000">
+        <path
+           d="M 500,10 C 229.4,10 10,229.4 10,500 10,770.6 229.4,990 500,990 770.6,990 990,770.6 990,500 990,229.4 770.6,10 500,10 Z m -61.2,183.8 c 0,-30.6 30.6,-61.3 61.3,-61.3 30.7,0 61.3,30.6 61.3,61.3 v 245 c 0,30.6 -30.6,61.3 -61.3,61.3 -30.7,0 -61.3,-30.6 -61.3,-61.3 z M 500,806.3 C 330.8,806.3 193.7,669.2 193.7,500 193.7,374.4 269.3,266.5 377.5,219.2 V 363 c -37.5,33.6 -61.3,82.5 -61.3,137 0,101.5 82.3,183.8 183.8,183.8 101.5,0 183.8,-82.3 183.8,-183.8 0,-54.5 -23.7,-103.3 -61.3,-137 V 219.2 C 730.7,266.5 806.3,374.4 806.3,500 806.3,669.2 669.2,806.3 500,806.3 Z"
+           id="path4"
+           style="fill:#ff0000" />
+      </g>
+      <g
+         id="g8"
+         style="fill:#ff0000" />
+      <g
+         id="g10"
+         style="fill:#ff0000" />
+      <g
+         id="g12"
+         style="fill:#ff0000" />
+      <g
+         id="g14"
+         style="fill:#ff0000" />
+      <g
+         id="g16"
+         style="fill:#ff0000" />
+      <g
+         id="g18"
+         style="fill:#ff0000" />
+      <g
+         id="g20"
+         style="fill:#ff0000" />
+      <g
+         id="g22"
+         style="fill:#ff0000" />
+      <g
+         id="g24"
+         style="fill:#ff0000" />
+      <g
+         id="g26"
+         style="fill:#ff0000" />
+      <g
+         id="g28"
+         style="fill:#ff0000" />
+      <g
+         id="g30"
+         style="fill:#ff0000" />
+      <g
+         id="g32"
+         style="fill:#ff0000" />
+      <g
+         id="g34"
+         style="fill:#ff0000" />
+      <g
+         id="g36"
+         style="fill:#ff0000" />
+    </g>
+    <path
+       id="rect76"
+       style="fill:#ff0000;stroke-width:0.0294588"
+       d="M 7.1728944,1.3376127 H 30.500303 V 8.8483784 H 7.1728944 Z" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.50823px;line-height:1.25;font-family:sans-serif;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0877062"
+       x="11.138003"
+       y="5.1911988"
+       id="text48"
+       transform="scale(0.84728472,1.1802408)"><tspan
+         sodipodi:role="line"
+         id="tspan46"
+         x="11.138003"
+         y="5.1911988"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:BankGothic;-inkscape-font-specification:BankGothic;fill:#ffffff;stroke-width:0.0877062">Alat Terputus</tspan></text>
+  </g>
+</svg>

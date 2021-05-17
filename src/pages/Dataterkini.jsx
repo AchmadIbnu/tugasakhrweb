@@ -1,6 +1,14 @@
 //  Region Import External Lib (e.g React, Reactstrap, etc)
 import React, { useEffect, useState, useCallback, PureComponent } from 'react';
-import { Col, Row, Typography, Card, DatePicker, TimePicker } from 'antd';
+import { 
+	Col, 
+	Row, 
+	Typography, 
+	Card, 
+	DatePicker, 
+	TimePicker, 
+	Tag  
+} from 'antd';
 import moment from 'moment';
 import {
 	LineChart,
@@ -14,7 +22,12 @@ import {
 	Label
 } from "recharts";
 import imgTerkini from '../assets/dataterkinihitam.svg';
+import imgKoneksi from '../assets/koneksion.svg';
 import { realtime } from '../firebase'
+import {
+	FieldTimeOutlined,
+	CalendarOutlined
+} from '@ant-design/icons';
 
 //  Region Import Utility/Helper Function
 
@@ -33,7 +46,13 @@ function Dataterkini() {
 const dateFormat = 'DD/MM/YYYY';
 const timeFormat = 'HH.mm.ss';
 const [data, setData]=useState([])
+const [dataHistory, setDataHistory]=useState([])
+const [time, setTime] = useState(moment())
   // const [isOn, setValue] = useState(false)
+
+  const loadTime = useCallback(()=>{
+  	setTime(moment())
+  }, [setTime])
 
   useEffect(() => {
   	realtime.ref('DataTerkini').on('value', snapshot => {
@@ -41,6 +60,15 @@ const [data, setData]=useState([])
   		console.log(snapshot.val())
       // getKoneksi()
   })
+
+  	realtime.ref('DataLog').on('value', snapshot => {
+  		setDataHistory(snapshot.val())
+  		console.log(snapshot.val())
+      // getKoneksi()
+  })
+  	setInterval(()=>{
+  		loadTime()
+  	}, 1000)
 
   }, [])
 
@@ -74,21 +102,34 @@ const datagrafik = [
 },
 ];
 
-
-
 return (
 	<>
+	<Row>
+	<Col xs={{ span: 12 }} lg={{ span: 12 }}>
 	<p style={{ fontSize: '2vw', wordWrap:'break-word', fontWeight: 'bold' }}>
 	<img src={imgTerkini} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 	Pemantauan Energi
-	<span style={{fontStyle: 'italic'}}> Realtime</span>
-	<DatePicker defaultValue={moment()} format={dateFormat}disabled style={{marginLeft: 210}}/>
-	<TimePicker defaultValue={moment()} format={timeFormat}disabled />
+	<span style={{fontStyle: 'italic'}}> Realtime   </span>
+	<img src={imgKoneksi} style={{maxWidth: '40%', maxHeight: '40%'}}/>
 	</p>
+	</Col>
+	<Col lg={{ span: 6, offset: 4}}>
+	<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat)}</Tag>
+	<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
+	</Col>
+	</Row>
+	
 	<Row gutter={[12, 20]}>
 	<Col xs={22} sm={22} md={22} lg={10}>
 	<Row style={{ marginBottom: 10 }}>
 	<Card bordered={false} style={{ minWidth: '100%' }}>
+	<form>
+	<label>
+	<Typography.Title level={5}>Inputkan nilai kWh terkini:</Typography.Title>
+	<input type="text" name="name" />
+	</label>
+	<input type="submit" value="Send" />
+	</form>
 	<Typography.Title level={5}>{`Sisa kWh : ${'kWh'}` }</Typography.Title>
 	<Typography.Title level={5}>Energi Terpakai : {parseFloat(data.kwh).toFixed(2)} kWh</Typography.Title>
 	<Typography.Title level={5}>Konversi Rupiah : Rp. {parseFloat(data.rp).toLocaleString()} ,- </Typography.Title>
@@ -107,20 +148,19 @@ return (
 	<Col lg={14} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24  }} md={{ order: 2 }}>
 	<Card  bordered={false} style={{ minWidth: '100%' }}>
 	<Typography.Title level={5}>GRAFIK PENGGUNAAN LISTRIK HARIAN</Typography.Title>
+	<ResponsiveContainer width="99%" height={300}>
 	<LineChart
-	width={500}
-	height={300}
-	data={datagrafik}
+	data={dataHistory}
 	margin={{
 		top: 5,
 		right: 45,
 		left: 0,
-		bottom: 5
+		bottom: 30
 	}}
 	>
 	<CartesianGrid strokeDasharray="3 3" />
-	<XAxis dataKey="name"  dy={1}>
-	<Label value='Hari, Tanggal' offset={2} position='bottom'  dy={5}/>
+	<XAxis dataKey="tanggal"  dy={1}>
+	<Label value='Hari, Tanggal' offset={2} position='bottom'  dy={20}/>
 	</XAxis>
 	<YAxis label={{ 
 		value: "Energi Listrik (kWh)", 
@@ -131,17 +171,12 @@ return (
 		<Legend />
 		<Line
 		type="monotone"
-		dataKey="kWh"
+		dataKey="nilai"
 		stroke="#8884d8"
 		activeDot={{ r: 8 }}
 		/>
-		<Line
-		type="monotone"
-		dataKey="prediksi"
-		stroke="#82ca9d"
-		activeDot={{ r: 8 }}
-		/>
 		</LineChart>
+		</ResponsiveContainer>
 		</Card>
 		</Col>
 		</Row>
