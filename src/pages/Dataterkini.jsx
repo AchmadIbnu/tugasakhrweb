@@ -22,7 +22,8 @@ import {
 	Label
 } from "recharts";
 import imgTerkini from '../assets/dataterkinihitam.svg';
-import imgKoneksi from '../assets/koneksion.svg';
+import imgKoneksion from '../assets/koneksion.svg';
+import imgKoneksioff from '../assets/koneksioff.svg';
 import { realtime } from '../firebase'
 import {
 	FieldTimeOutlined,
@@ -129,7 +130,7 @@ return (
 	<img src={imgTerkini} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 	Pemantauan Energi
 	<span style={{fontStyle: 'italic'}}> Realtime   </span>
-	<img src={imgKoneksi} style={{maxWidth: '40%', maxHeight: '40%'}}/>
+	<img src={imgKoneksion} style={{maxWidth: '40%', maxHeight: '40%'}}/>
 	</p>
 	</Col>
 	<Col lg={{ span: 6, offset: 4}}>
@@ -174,7 +175,7 @@ return (
 		top: 5,
 		right: 45,
 		left: 0,
-		bottom: 30
+		bottom: 14
 	}}
 	>
 	<CartesianGrid strokeDasharray="3 3" />

@@ -19,8 +19,8 @@ const loading = () => <div>Loading...</div>;
 
 const items = [
 { key: '1', label: 'Home', path: '/', icon: <HomeOutlined/> },
-{ key: '2', label: 'DataTerkini', path: '/dataterkini', icon: <MonitorOutlined/> },
-{ key: '3', label: 'Histori & Alarm', path: '/histori', icon: <ReconciliationOutlined/> },
+{ key: '2', label: 'Data Terkini', path: '/dataterkini', icon: <MonitorOutlined/> },
+{ key: '3', label: 'Histori', path: '/histori', icon: <ReconciliationOutlined/> },
 { key: '4', label: 'Prediksi', path: '/prediksi', icon: <RobotOutlined/> },
 ]
 function LayoutComp({children}) {
@@ -53,7 +53,7 @@ return (
     console.log(collapsed, type);
   }}
   >
-  <h1 style={{ fontSize: '3vw', fontWeight: 'bold', wordWrap:'break-word', textAlign: 'center' }}>
+  <h1 style={{ fontSize: '2.5vw', fontWeight: 'bold', wordWrap:'break-word', textAlign: 'center' }}>
   PESILINTAR <br />
   </h1>
   <img src={imgIcon} alt="" style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/>

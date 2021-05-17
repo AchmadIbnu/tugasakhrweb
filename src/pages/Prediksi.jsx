@@ -1,20 +1,32 @@
 //  Region Import External Lib (e.g React, Reactstrap, etc)
 import React, { useEffect, useState, useCallback } from 'react';
 import imgPrediksi from '../assets/prediksihitam.svg';
-import { Col, Row, Typography, Card, DatePicker, TimePicker, Button  } from 'antd';
-import { PoweroffOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import {
-	LineChart,
-	Line,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer,
-	Label
-} from "recharts";
+import { 
+	Col, 
+	Row, 
+	Typography, 
+	Card, 
+	DatePicker, 
+	TimePicker, 
+	Button, 
+	Tag  } from 'antd';
+	import { PoweroffOutlined } from '@ant-design/icons';
+	import moment from 'moment';
+	import {
+		LineChart,
+		Line,
+		XAxis,
+		YAxis,
+		CartesianGrid,
+		Tooltip,
+		Legend,
+		ResponsiveContainer,
+		Label
+	} from "recharts";
+	import {
+		FieldTimeOutlined,
+		CalendarOutlined
+	} from '@ant-design/icons';
 //  Region Import Utility/Helper Function
 
 //  Region Import Components
@@ -32,6 +44,12 @@ function Prediksi() {
 //  Function declaration (handle, onchange, etc)
 const dateFormat = 'DD/MM/YYYY';
 const timeFormat = 'HH.mm.ss';
+const [time, setTime] = useState(moment())
+
+const loadTime = useCallback(()=>{
+	setTime(moment())
+}, [setTime])
+
 const handleClick = () => {
 	const data = {
 		name: "23/05/2021",
@@ -40,6 +58,23 @@ const handleClick = () => {
 
 	}
 }
+useEffect(() => {
+	setInterval(()=>{
+		loadTime()
+	}, 1000)
+
+	// setTimeout(()=>{
+	// 	if(prevDataI === data.i){
+	// 		setValue(false)
+	// 	}
+	// 	else if (prevDataI !== data.i){
+	// 		setValue(true)
+	// 	}
+	// }, 2000)
+
+
+
+}, [])
 const data = [
 {
 	name: "Senin",
@@ -81,12 +116,19 @@ const data = [
 
 return (
 	<>
-	<p style={{ fontSize: '2vw', fontWeight: 'bold', wordWrap:'break-word' }}>
+	<Row>
+	<Col xs={{ span: 12 }} lg={{ span: 12 }}>
+	<p style={{ fontSize: '2vw', wordWrap:'break-word', fontWeight: 'bold' }}>
 	<img src={imgPrediksi} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 	Prediksi
-	<DatePicker defaultValue={moment()} format={dateFormat}disabled style={{marginLeft: 430}}/>
-	<TimePicker defaultValue={moment()} format={timeFormat}disabled />
 	</p>
+	</Col>
+	<Col lg={{ span: 6, offset: 4}}>
+	<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat)}</Tag>
+	<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
+	</Col>
+	</Row>
+
 	<Row gutter={[10, 20]}>
 	<Col xs={24} sm={24} md={24} lg={8}>
 	<Row style={{ marginBottom: 10 }}>
@@ -103,20 +145,20 @@ return (
 	<Col lg={16} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24  }} md={{ order: 2 }}>
 	<Card  bordered={false} style={{ minWidth: '100%' }}>
 	<Typography.Title level={5}>GRAFIK PREDIKSI <span style={{fontStyle: 'italic'}}> ML Regression Linear</span></Typography.Title>
+	
+	<ResponsiveContainer width="99%" height={300}>
 	<LineChart
-	width={500}
-	height={300}
 	data={data}
 	margin={{
 		top: 5,
-		right: 30,
-		left: 5,
-		bottom: 5
+		right: 45,
+		left: 0,
+		bottom: 10
 	}}
 	>
 	<CartesianGrid strokeDasharray="3 3" />
 	<XAxis dataKey="name"  dy={1}>
-	<Label value='Hari' offset={2} position='bottom'  dy={5}/>
+	<Label value='Hari' offset={2} position='bottom'  dy={20}/>
 	</XAxis>
 	<YAxis label={{ 
 		value: "Energi Listrik (kWh)", 
@@ -138,6 +180,7 @@ return (
 		activeDot={{ r: 8 }}
 		/>
 		</LineChart>
+		</ResponsiveContainer>
 		</Card>
 		</Col>
 		</Row>

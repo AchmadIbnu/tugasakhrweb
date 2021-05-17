@@ -28,11 +28,11 @@ import {
 //  Region Import Constants
 const columns = [
 {
-	title: <span style={{fontStyle: 'bold'}}> 'No'</span>,
-	dataIndex: 'no',
+	title:  'Kode',
+	dataIndex: 'kode',
 	width: 65,
 	sorter: {
-		compare: (a, b) => a.no - b.no,
+		compare: (a, b) => a.kode - b.kode,
 		multiple: 3,
 	},
 },
@@ -40,10 +40,6 @@ const columns = [
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
 	width: 110,
-	sorter: {
-		compare: (a, b) => a.tanggal - b.tanggal,
-		multiple: 3,
-	},
 },
 {
 	title: 'Jam',
@@ -56,83 +52,8 @@ const columns = [
 },
 {
 	title: 'Jenis Alarm',
-	dataIndex: 'jenisalarm',
+	dataIndex: 'jenis',
 	width: 150,
-},
-];
-
-const dataalarm = [
-{
-	no: '1',
-	tanggal : '09/05/2021',
-	jam : '09.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '2',
-	tanggal : '11/05/2021',
-	jam : '23.00',
-	jenisalarm :'Listrik Low'
-},
-{
-	no: '3',
-	tanggal : '10/05/2021',
-	jam : '11.00',
-	jenisalarm :'Prediksi'
-},
-{
-	no: '4',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '5',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '6',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '7',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '8',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '9',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '10',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '11',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
-},
-{
-	no: '12',
-	tanggal : '12/05/2021',
-	jam : '08.00',
-	jenisalarm :'Alarm Overload'
 },
 ];
 
@@ -141,10 +62,6 @@ const columns2 = [
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
 	width: 150,
-	sorter: {
-		compare: (a, b) => a.tanggal - b.tanggal,
-		multiple: 3,
-	},
 },
 {
 	title: 'kWh',
@@ -167,7 +84,9 @@ function Histori() {
 
 //  react Hooks (useEffect, etc)
 const [dataListrik, setDataListrik] = useState([])
+const [dataAlarm, setDataAlarm] = useState([])
 const [monthListrik, setMonthListrik] = useState('')
+const [monthAlarm, setMonthAlarm] = useState('')
 const [totalKwh, setTotalKwh] = useState(0)
 const [time, setTime] = useState(moment())
 
@@ -179,6 +98,17 @@ const loadTime = useCallback(()=>{
 const onChangeMonthListrik = (date, dateString) => {
 	setMonthListrik(`${dateString}`)
 }
+const onChangeMonthAlarm = (date, dateString) => {
+	setMonthAlarm(`${dateString}`)
+	let _filterAlarm = dataAlarm.filter((j)=>
+		j.tanggal.includes(monthAlarm))
+	setDataAlarm(_filterAlarm)
+	// onAlarm()
+}
+
+// const onAlarm = useCallback(()=>{
+	
+// }, [setDataAlarm])
 
 const handleClick = () => {
 	let _filterHistory = dataListrik.filter((i)=>
@@ -204,22 +134,27 @@ useEffect(()=> {
 		setDataListrik(_filterHistory)
 		onTotalkwh()
 
-		setInterval(()=>{
-			loadTime()
-		}, 1000)
+		
 
 	})
+	realtime.ref('DataAlarm').on('value', snapshot => {
+		let _filterAlarm = snapshot.val().filter((j)=>
+			j.tanggal.includes(monthAlarm))
+		setDataAlarm(_filterAlarm)
+	})
+	setInterval(()=>{
+		loadTime()
+	}, 500)
 
 
-
-
-}, [monthListrik])
+}, [monthListrik, monthAlarm])
 
 console.log(monthListrik)
 console.log(totalKwh)
 
 		//  Function declaration (handle, onchange, etc)
 		const dateFormat = 'MM/YYYY';
+		const dateFormat2 = 'DD/MM/YYYY';
 		const timeFormat = 'HH.mm.ss';
 		return (
 			<>
@@ -228,11 +163,11 @@ console.log(totalKwh)
 			<Col xs={{ span: 12 }} lg={{ span: 12 }}>
 			<p style={{ fontSize: '2vw',fontStyle: 'italic', wordWrap:'break-word', fontWeight: 'bold' }}>
 			<img src={imgHistori} style={{maxWidth: '100%', maxHeight: '100%'}}/>
-			History & Alarm
+			History Energy & Alarm
 			</p>
 			</Col>
 			<Col lg={{ span: 6, offset: 4}}>
-			<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat)}</Tag>
+			<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat2)}</Tag>
 			<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
 			</Col>
 			</Row>
@@ -241,11 +176,13 @@ console.log(totalKwh)
 			<Col xs={24} sm={24} md={5} lg={12}>
 			<Row style={{ marginBottom: 10 }}>
 			<Card bordered={true} style={{ minWidth: '100%' }}>
-			<p style={{fontWeight: 'bold',fontStyle: 'italic',fontSize: 20,}}>
-			Alarm
+			<p style={{fontWeight: 'bold',fontSize: 20,}}>
+			Riwayat 
+			<span style={{fontStyle: 'italic'}}> Alarm</span>
 			</p>
-			<DatePicker picker='month'/>
-			<Table columns={columns} dataSource={dataalarm} scroll={{ x: 10, y: 200 }} />
+			<DatePicker picker='month' onChange={onChangeMonthAlarm} format={dateFormat}/>
+			<p style={{float:'right'}}	>Total Data: {dataAlarm.length}</p>
+			<Table columns={columns} dataSource={dataAlarm} scroll={{ x: 10, y: 200 }} />
 			</Card>
 			</Row>
 			</Col>
@@ -258,14 +195,16 @@ console.log(totalKwh)
 			<Button onClick={handleClick}>Hitung</Button>
 			<p style={{float:'right'}}	>Total Data: {dataListrik.length}</p>
 			<Table columns={columns2} dataSource={dataListrik} scroll={{ x: 10, y: 200 }} />
-			<p>{totalKwh}</p>
-			<p>{`Rp. ${parseFloat(totalKwh * 1444.7).toLocaleString()} ,-`}</p>
+			<Typography.Title level={5}>Total kWh : {parseFloat(totalKwh).toFixed(2)} kWh Setara dengan 
+			{` Rp. ${parseFloat(totalKwh * 1444.7).toLocaleString()} ,-`}</Typography.Title>
+			<p>*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp.1.444,7)	 
+		</p>
 
-			</Card>
-			</Col>
-			</Row>
-			</>
-			);
-	}
+		</Card>
+		</Col>
+		</Row>
+		</>
+		);
+}
 
-	export default Histori
+export default Histori
