@@ -7,7 +7,8 @@ import {
 	Card, 
 	DatePicker, 
 	TimePicker, 
-	Tag  
+	Tag,
+	Button  
 } from 'antd';
 import moment from 'moment';
 import {
@@ -53,74 +54,81 @@ function Dataterkini() {
 const dateFormat = 'DD/MM/YYYY';
 const timeFormat = 'HH.mm.ss';
 const [data, setData]=useState([])
+const [kWhPengurang, setPengurang]=useState([])
+const [datakwh, setDatakwh]=useState([])
 const [dataHistory, setDataHistory]=useState([])
+const [dataUpdate, setDataUpdate]=useState([])
+const [kwhterkini]=useState([])
+const [kwhpengurang]=useState([])
 const [time, setTime] = useState(moment())
 const [isOn, setValue] = useState(false)
+const HasilSisa = datakwh - kWhPengurang;
 // let prevDataI = usePrevious(data.i)
+const [title, setTitle] = useState('');
+
+const handleOnChange = (e) => {
+	setTitle(e.target.value);
+};
+// const createTodo = (){...}
+const createTodo = () => {
+	const todoRef = realtime.database().ref('SisakWh');
+	const todo = {
+		title,
+	};
+};
+
 
 const loadTime = useCallback(()=>{
 	setTime(moment())
 }, [setTime])
 
+const handleClick = () => {
+	realtime.ref('SisakWh').on('value').set(kwhterkini)
+	console.log(kwhterkini)
+}
+
+
+// const handleClick = () => {
+// 	let _filterHistory = dataListrik.filter((i)=>
+// 		i.tanggal.includes(monthListrik))
+// 	setDataListrik(_filterHistory)
+// 	onTotalkwh()
+// }
 useEffect(() => {
 	realtime.ref('DataTerkini').on('value', snapshot => {
 		setData(snapshot.val())
 		setValue(true)
-      // getKoneksi()
-  })
+
+	})
 
 	realtime.ref('DataLog').on('value', snapshot => {
 		setDataHistory(snapshot.val())
-		console.log(snapshot.val())
-      // getKoneksi()
-  })
+		// console.log(snapshot.val())
+
+	})
+	realtime.ref('lastupdate').on('value', snapshot => {
+		setDataUpdate(snapshot.val())
+		// console.log(snapshot.val())
+
+	})
+	realtime.ref('SisakWh').on('value', snapshot => {
+		setDatakwh(snapshot.val())
+		// console.log(snapshot.val())
+
+	})
+	realtime.ref('kWhPengurang').on('value', snapshot => {
+		setPengurang(snapshot.val())
+		// console.log(snapshot.val())
+
+	})
 	setInterval(()=>{
 		loadTime()
 	}, 1000)
-
-	// setTimeout(()=>{
-	// 	if(prevDataI === data.i){
-	// 		setValue(false)
-	// 	}
-	// 	else if (prevDataI !== data.i){
-	// 		setValue(true)
-	// 	}
-	// }, 2000)
-
 
 
 }, [])
 
 //  Function declaration (handle, onchange, etc)
-const datagrafik = [
-{
-	name: "23/05/2021",
-	kWh: 1200,
-	prediksi: 2200,
-	
-},
-{
-	name: "24/05/2021",
-	kWh: 1800,
-	prediksi: 1000,
-},
-{
-	name: "25/05/2021",
-	kWh: 3400,
-	prediksi: 2900,
-},
-{
-	name: "26/05/2021",
-	kWh: 3000,
-	prediksi: 2100,
-},
-{
-	name: "27/05/2021",
-	kWh: 3000,
-	prediksi: 2400,
-},
-];
-
 
 return (
 	<>
@@ -129,8 +137,8 @@ return (
 	<p style={{ fontSize: '2vw', wordWrap:'break-word', fontWeight: 'bold' }}>
 	<img src={imgTerkini} style={{maxWidth: '100%', maxHeight: '100%'}}/>
 	Pemantauan Energi
-	<span style={{fontStyle: 'italic'}}> Realtime   </span>
-	<img src={imgKoneksion} style={{maxWidth: '40%', maxHeight: '40%'}}/>
+	<span style={{fontStyle: 'italic'}}> Realtime</span>
+	<img src={imgKoneksioff} style={{marginLeft: 20}}/>
 	</p>
 	</Col>
 	<Col lg={{ span: 6, offset: 4}}>
@@ -138,21 +146,20 @@ return (
 	<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
 	</Col>
 	</Row>
-	
 	<Row gutter={[12, 20]}>
-	<Col xs={22} sm={22} md={22} lg={10}>
-	<Row style={{ marginBottom: 10 }}>
+	<Col xs={24} sm={24} md={24} lg={10}>
+	<Row style={{ marginBottom: 0 }}>
 	<Card bordered={false} style={{ minWidth: '100%' }}>
 	<form>
-	<label>
-	<Typography.Title level={5}>Inputkan nilai kWh terkini:</Typography.Title>
-	<input type="text" name="name" />
-	</label>
-	<input type="submit" value="Send" />
+	<Typography.Title level={5}>Inputkan kWh terkini:</Typography.Title>
+	<input type="text" onChange={handleOnChange} value={title} />
+	<button onClick={createTodo}>Update</button>
+	<Typography.Title style={{marginTop : 5}} level={5}>Sisa kWh : {parseFloat(HasilSisa)} kWh</Typography.Title>
 	</form>
-	<Typography.Title level={5}>{`Sisa kWh : ${'kWh'}` }</Typography.Title>
+	</Card>
+	<Card bordered={true} style={{ minWidth: '100%' }}>
 	<Typography.Title level={5}>Energi Terpakai : {parseFloat(data.kwh).toFixed(2)} kWh</Typography.Title>
-	<Typography.Title level={5}>Konversi Rupiah : Rp. {parseFloat(data.rp).toLocaleString()} ,- </Typography.Title>
+	<Typography.Title style={{marginTop : 5}} level={5}>Konversi Rupiah :     Rp. {parseFloat(data.rp).toLocaleString("en-US",{maximumFractionDigits:0})} ,- </Typography.Title>
 	</Card>
 	</Row>
 	<Row >

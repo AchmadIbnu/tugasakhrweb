@@ -66,7 +66,7 @@ const columns2 = [
 {
 	title: 'kWh',
 	dataIndex: 'nilai',
-	width: 70,
+	width: 100,
 	sorter: {
 		compare: (a, b) => a.nilai - b.nilai,
 		multiple: 2,
@@ -76,7 +76,7 @@ const columns2 = [
 	title: 'Rupiah',
 	dataIndex: 'rupiah',
 	width: 150,
-	render: (text, record, index) => parseFloat(record.nilai * 1444.7).toLocaleString()
+	render: (text, record, index) => parseFloat(record.nilai * 1444.7).toLocaleString("en-US",{maximumFractionDigits:0})
 },
 ];
 
@@ -134,8 +134,6 @@ useEffect(()=> {
 		setDataListrik(_filterHistory)
 		onTotalkwh()
 
-		
-
 	})
 	realtime.ref('DataAlarm').on('value', snapshot => {
 		let _filterAlarm = snapshot.val().filter((j)=>
@@ -173,7 +171,7 @@ console.log(totalKwh)
 			</Row>
 
 			<Row gutter={[20, 20]}>
-			<Col xs={24} sm={24} md={5} lg={12}>
+			<Col xs={24} sm={24} md={24} lg={12}>
 			<Row style={{ marginBottom: 10 }}>
 			<Card bordered={true} style={{ minWidth: '100%' }}>
 			<p style={{fontWeight: 'bold',fontSize: 20,}}>
@@ -196,8 +194,8 @@ console.log(totalKwh)
 			<p style={{float:'right'}}	>Total Data: {dataListrik.length}</p>
 			<Table columns={columns2} dataSource={dataListrik} scroll={{ x: 10, y: 200 }} />
 			<Typography.Title level={5}>Total kWh : {parseFloat(totalKwh).toFixed(2)} kWh Setara dengan 
-			{` Rp. ${parseFloat(totalKwh * 1444.7).toLocaleString()} ,-`}</Typography.Title>
-			<p>*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp.1.444,7)	 
+			{` Rp. ${parseFloat(totalKwh * 1444.7).toLocaleString("en-US",{maximumFractionDigits:0})} ,-`}</Typography.Title>
+			<p>*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp. 1,444.7)	 
 		</p>
 
 		</Card>
