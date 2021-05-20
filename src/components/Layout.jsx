@@ -1,10 +1,23 @@
 //  Region Import External Lib (e.g React, Reactstrap, etc)
 import React, { useEffect, useState, useCallback, Suspense }  from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Layout, Menu } from 'antd';
 import { HomeOutlined, MonitorOutlined, ReconciliationOutlined, RobotOutlined } from '@ant-design/icons';
 import imgIcon from '../assets/polman.png';
-
+import imgKoneksion from '../assets/koneksion.svg';
+import imgKoneksioff from '../assets/koneksioff.svg';
+import { 
+  Layout, 
+  Menu,
+  DatePicker,
+  Tag, 
+  TimePicker
+} from 'antd';
+import moment from 'moment';
+import { realtime } from '../firebase'
+import {
+  FieldTimeOutlined,
+  CalendarOutlined
+} from '@ant-design/icons';
 const { Header, Content, Footer, Sider } = Layout;
 //  Region Import Utility/Helper Function
 
@@ -15,6 +28,7 @@ const { Header, Content, Footer, Sider } = Layout;
 //  Region Import Style
 
 //  Region Import Constants
+
 const loading = () => <div>Loading...</div>;
 
 const items = [
@@ -23,7 +37,13 @@ const items = [
 { key: '3', label: 'Histori', path: '/histori', icon: <ReconciliationOutlined/> },
 { key: '4', label: 'Prediksi', path: '/prediksi', icon: <RobotOutlined/> },
 ]
+
 function LayoutComp({children}) {
+  const timeFormat = 'HH.mm.ss';
+  const dateFormat = 'DD/MM/YYYY';
+  const [time, setTime] = useState(moment())
+  const waktuSekarang = time.format(timeFormat)
+  const [dataUpdate, setDataUpdate]=useState([])
 //  Function declaration (handle, onchange, etc)
 const location = useLocation()
 const history = useHistory()
@@ -32,14 +52,31 @@ const onClickMenu = (item) => {
   const clicked = items.find(_item => _item.key === item.key)
   history.push(clicked.path)
 }
+
+const loadTime = useCallback(()=>{
+  setTime(moment())
+}, [setTime])
+// const isOn = dataUpdate <= waktuSekarang;
+let isOn
+if(dataUpdate > waktuSekarang) {
+  const isOn = true;
+} else {
+  const isOn = false;
+}
 //  react Hooks (useEffect, etc)
 useEffect(() => {
   console.log();
   setSelectedKey(items.find(o => o.path === location.pathname).key)
-}, [location])
+  realtime.ref('lastupdate').on('value', snapshot => {
+    setDataUpdate(snapshot.val())
+  })
+  setInterval(()=>{
+    loadTime()
+  }, 1000)
+}, [location, dataUpdate])
 
-
-
+console.log(dataUpdate)
+console.log(waktuSekarang)
 return (
   <Layout>
   <Sider
@@ -64,6 +101,9 @@ return (
   {items.map((item) => (
    <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
    ))}
+   {isOn ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/> : <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/>}
+   <Tag color="#55acee" icon={<CalendarOutlined />} style={{fontColor: 'ffff', fontSize: 17, marginLeft: 28, marginTop : 5}}>{moment().format(dateFormat)}</Tag>
+   <Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17, marginLeft: 40, marginTop : 5}}>{time.format(timeFormat)}</Tag>
    </Menu>
    </Sider>
    <Layout>

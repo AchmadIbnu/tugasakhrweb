@@ -55,9 +55,11 @@ const columns = [
 	dataIndex: 'jenis',
 	width: 150,
 },
+
 ];
 
 const columns2 = [
+
 {
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
@@ -156,7 +158,6 @@ console.log(totalKwh)
 		const timeFormat = 'HH.mm.ss';
 		return (
 			<>
-			
 			<Row>
 			<Col xs={{ span: 12 }} lg={{ span: 12 }}>
 			<p style={{ fontSize: '2vw',fontStyle: 'italic', wordWrap:'break-word', fontWeight: 'bold' }}>
@@ -169,33 +170,33 @@ console.log(totalKwh)
 			<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
 			</Col>
 			</Row>
-
 			<Row gutter={[20, 20]}>
 			<Col xs={24} sm={24} md={24} lg={12}>
 			<Row style={{ marginBottom: 10 }}>
 			<Card bordered={true} style={{ minWidth: '100%' }}>
-			<p style={{fontWeight: 'bold',fontSize: 20,}}>
+			<p style={{fontWeight: 'bold',fontSize: 20,marginBottom : 5, marginTop : 0}}>
 			Riwayat 
 			<span style={{fontStyle: 'italic'}}> Alarm</span>
 			</p>
 			<DatePicker picker='month' onChange={onChangeMonthAlarm} format={dateFormat}/>
 			<p style={{float:'right'}}	>Total Data: {dataAlarm.length}</p>
-			<Table columns={columns} dataSource={dataAlarm} scroll={{ x: 10, y: 200 }} />
+			<Table columns={columns} dataSource={dataAlarm} scroll={{ x: 10, y: 180 }} />
 			</Card>
 			</Row>
 			</Col>
 			<Col lg={12} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24  }} md={{ order: 5 }}>
 			<Card  bordered={false} style={{ minWidth: '100%' }}>
-			<p style={{fontWeight: 'bold',fontSize: 20,}}>
+			<p style={{fontWeight: 'bold',fontSize: 20, marginBottom : 5, marginTop : 0}}>
 			Riwayat Penggunaan Listrik
 			</p>
 			<DatePicker picker='month' onChange={onChangeMonthListrik} format={dateFormat}/>
 			<Button onClick={handleClick}>Hitung</Button>
 			<p style={{float:'right'}}	>Total Data: {dataListrik.length}</p>
-			<Table columns={columns2} dataSource={dataListrik} scroll={{ x: 10, y: 200 }} />
-			<Typography.Title level={5}>Total kWh : {parseFloat(totalKwh).toFixed(2)} kWh Setara dengan 
+			<Table columns={columns2} dataSource={dataListrik} scroll={{ x: 10, y: 150 }} />
+			<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Total kWh : {parseFloat(totalKwh).toFixed(2)} kWh Setara dengan 
 			{` Rp. ${parseFloat(totalKwh * 1444.7).toLocaleString("en-US",{maximumFractionDigits:0})} ,-`}</Typography.Title>
-			<p>*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp. 1,444.7)	 
+			<p style={{marginTop : 0, marginBottom : 0}}>
+			*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp. 1,444.7)	 
 		</p>
 
 		</Card>

@@ -146,7 +146,7 @@ return (
 	<Card  bordered={false} style={{ minWidth: '100%' }}>
 	<Typography.Title level={5}>GRAFIK PREDIKSI <span style={{fontStyle: 'italic'}}> ML Regression Linear</span></Typography.Title>
 	
-	<ResponsiveContainer width="99%" height={300}>
+	<ResponsiveContainer width="99%" height={350}>
 	<LineChart
 	data={data}
 	margin={{
