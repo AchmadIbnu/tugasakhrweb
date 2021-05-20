@@ -42,7 +42,6 @@ function LayoutComp({children}) {
   const timeFormat = 'HH.mm.ss';
   const dateFormat = 'DD/MM/YYYY';
   const [time, setTime] = useState(moment())
-  const waktuSekarang = time.format(timeFormat)
   const [dataUpdate, setDataUpdate]=useState([])
 //  Function declaration (handle, onchange, etc)
 const location = useLocation()
@@ -56,16 +55,9 @@ const onClickMenu = (item) => {
 const loadTime = useCallback(()=>{
   setTime(moment())
 }, [setTime])
-// const isOn = dataUpdate <= waktuSekarang;
-let isOn
-if(dataUpdate > waktuSekarang) {
-  const isOn = true;
-} else {
-  const isOn = false;
-}
+
 //  react Hooks (useEffect, etc)
 useEffect(() => {
-  console.log();
   setSelectedKey(items.find(o => o.path === location.pathname).key)
   realtime.ref('lastupdate').on('value', snapshot => {
     setDataUpdate(snapshot.val())
@@ -75,20 +67,14 @@ useEffect(() => {
   }, 1000)
 }, [location, dataUpdate])
 
-console.log(dataUpdate)
-console.log(waktuSekarang)
+let waktuSekarang = moment().subtract(20, 'second').format(timeFormat)
+
 return (
   <Layout>
   <Sider
   className="site-layout-background"
   breakpoint="lg"
   collapsedWidth="0"
-  onBreakpoint={broken => {
-    console.log(broken);
-  }}
-  onCollapse={(collapsed, type) => {
-    console.log(collapsed, type);
-  }}
   >
   <h1 style={{ fontSize: '2.5vw', fontWeight: 'bold', wordWrap:'break-word', textAlign: 'center' }}>
   PESILINTAR <br />
@@ -101,9 +87,9 @@ return (
   {items.map((item) => (
    <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
    ))}
-   {isOn ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/> : <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/>}
+   {dataUpdate > waktuSekarang ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}  alt='gambar koneksi on' /> : <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}} alt='gambar koneksi off'/>}
    <Tag color="#55acee" icon={<CalendarOutlined />} style={{fontColor: 'ffff', fontSize: 17, marginLeft: 28, marginTop : 5}}>{moment().format(dateFormat)}</Tag>
-   <Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17, marginLeft: 40, marginTop : 5}}>{time.format(timeFormat)}</Tag>
+   <Tag color="#55acee"  icon={<FieldTimeOutlined />} style={{fontSize: 17, marginLeft: 40, marginTop : 5}}>{time.format(timeFormat)}</Tag>
    </Menu>
    </Sider>
    <Layout>
