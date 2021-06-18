@@ -124,8 +124,6 @@ return (
 	</p>
 	</Col>
 	<Col lg={{ span: 6, offset: 4}}>
-	<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat)}</Tag>
-	<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
 	</Col>
 	</Row>
 

@@ -36,10 +36,11 @@ const items = [
 { key: '2', label: 'Data Terkini', path: '/dataterkini', icon: <MonitorOutlined/> },
 { key: '3', label: 'Histori', path: '/histori', icon: <ReconciliationOutlined/> },
 { key: '4', label: 'Prediksi', path: '/prediksi', icon: <RobotOutlined/> },
+{ key: '5', label: 'Trigger', path: '/trigger', icon: <RobotOutlined/> },
 ]
 
 function LayoutComp({children}) {
-  const timeFormat = 'HH.mm.ss';
+  const timeFormat = 'HH:mm:ss';
   const dateFormat = 'DD/MM/YYYY';
   const [time, setTime] = useState(moment())
   const [dataUpdate, setDataUpdate]=useState([])
@@ -67,8 +68,8 @@ useEffect(() => {
   }, 1000)
 }, [location, dataUpdate])
 
-let waktuSekarang = moment().subtract(20, 'second').format(timeFormat)
-
+let waktuSekarang = moment().subtract(10, 'second').format(timeFormat)
+localStorage.setItem ("WaktuSekarang", waktuSekarang)
 return (
   <Layout>
   <Sider
@@ -87,7 +88,8 @@ return (
   {items.map((item) => (
    <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
    ))}
-   {dataUpdate > waktuSekarang ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}  alt='gambar koneksi on' /> : <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}} alt='gambar koneksi off'/>}
+   {dataUpdate > waktuSekarang ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}  alt='gambar koneksi on' /> : 
+   <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}} alt='gambar koneksi off'/>}
    <Tag color="#55acee" icon={<CalendarOutlined />} style={{fontColor: 'ffff', fontSize: 17, marginLeft: 28, marginTop : 5}}>{moment().format(dateFormat)}</Tag>
    <Tag color="#55acee"  icon={<FieldTimeOutlined />} style={{fontSize: 17, marginLeft: 40, marginTop : 5}}>{time.format(timeFormat)}</Tag>
    </Menu>

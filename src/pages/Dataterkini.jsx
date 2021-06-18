@@ -61,7 +61,8 @@ const [kwhterkini]=useState([])
 const [kwhpengurang]=useState([])
 const [time, setTime] = useState(moment())
 const [isOn, setValue] = useState(false)
-const HasilSisa = datakwh - kWhPengurang;
+const [HasilSisa, setDatasisa]=useState([])
+// const HasilSisa = datakwh - kWhPengurang;
 
 const [dataListrik, setDataListrik] = useState([])
 const [monthListrik, setMonthListrik] = useState('')
@@ -71,12 +72,31 @@ const [title, setTitle] = useState('');
 const handleOnChange = (e) => {
 	setTitle(e.target.value);
 };
+
 const createTodo = () => {
-	const todoRef = realtime.database().ref('SisakWh');
-	const todo = {
-		title,
-	};
+	console.log(title)
+	if (title != undefined || title != "" || title != Number(""))
+	{
+		realtime
+		.ref(`SisakWh`)
+		.set(parseInt(title))
+		setTitle("");
+		
+		realtime
+		.ref(`Reset`)
+		.set(1)
+		
+		setTimeout(() => {  
+			realtime
+			.ref(`Reset`)
+			.set(0)
+
+			
+		}, 2000);
+
+	}
 };
+
 
 
 const loadTime = useCallback(()=>{
@@ -98,12 +118,6 @@ useEffect(() => {
 		setValue(true)
 
 	})
-
-	// realtime.ref('DataLog').on('value', snapshot => {
-	// 	setDataHistory(snapshot.val())
-	// 	// console.log(snapshot.val())
-
-	// })
 	realtime.ref('DataLog').on('value', snapshot => {
 		let _filterLog = snapshot.val().filter((i)=>
 			i.tanggal.includes(monthListrik))
@@ -112,14 +126,22 @@ useEffect(() => {
 	})
 	
 	realtime.ref('SisakWh').on('value', snapshot => {
-		setDatakwh(snapshot.val())
+		var SisakWh =snapshot.val();
+		realtime.ref('kWhPengurang').on('value', snapshot => {
+			var kWhPengurang = snapshot.val()
+			realtime
+			.ref(`Hasilsisa`)
+			.set(SisakWh - kWhPengurang)
 		// console.log(snapshot.val())
 
 	})
-	realtime.ref('kWhPengurang').on('value', snapshot => {
-		setPengurang(snapshot.val())
 		// console.log(snapshot.val())
+	})
 
+	realtime.ref('Hasilsisa').on('value', snapshot => {
+		setDatasisa(snapshot.val())
+
+		// console.log(snapshot.val())
 	})
 	setInterval(()=>{
 		loadTime()
@@ -141,23 +163,21 @@ return (
 	</p>
 	</Col>
 	<Col lg={{ span: 6, offset: 4}}>
-	<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat)}</Tag>
-	<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
 	</Col>
 	</Row>
 	<Row gutter={[16, 20]}>
 	<Col xs={24} sm={24} md={24} lg={8}>
 	<Row style={{ marginBottom: 0 }}>
 	<Card bordered={false} style={{ minWidth: '100%', minHeight: '50%'  }}>
-	<form>
-	<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Masukkan kWh terkini:</Typography.Title>
-	<input type="text" onChange={handleOnChange} value={title} />
-	<button onClick={createTodo}>Perbaharui</button>
-	<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa)} kWh</Typography.Title>
-	<p style={{ fontSize: 14, wordWrap:'break-word', marginTop : 0, marginBottom : 1}}>
-	*) Perbaharui saat mengisi token listrik
+{/* <form> */}
+<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Masukkan kWh terkini:</Typography.Title>
+<input type="text" onChange={handleOnChange} value={title} id="title"/>
+<button onClick={createTodo}>Perbaharui</button>
+<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa)} kWh</Typography.Title>
+<p style={{ fontSize: 14, wordWrap:'break-word', marginTop : 0, marginBottom : 1}}>
+*) Perbaharui saat mengisi token listrik
 </p>
-</form>
+{/* </form> */}
 </Card>
 <Card bordered={true} style={{ minWidth: '100%', minHeight: '50%' }}>
 <Typography.Title style={{marginTop : 0, marginBottom : 5}} level={5}>Pemantauan Terkini</Typography.Title>

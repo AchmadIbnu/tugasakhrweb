@@ -138,6 +138,12 @@ useEffect(()=> {
 
 	})
 	realtime.ref('DataAlarm').on('value', snapshot => {
+		var listAlarm;
+		var objectAlarm = snapshot.val();
+		Object.entries(objectAlarm).forEach(([key, value]) => {
+  console.log("INI OBJECT",`${key} ${value}`); // "a 5", "b 7", "c 9"
+});
+
 		let _filterAlarm = snapshot.val().filter((j)=>
 			j.tanggal.includes(monthAlarm))
 		setDataAlarm(_filterAlarm)
@@ -166,8 +172,7 @@ console.log(totalKwh)
 			</p>
 			</Col>
 			<Col lg={{ span: 6, offset: 4}}>
-			<Tag color="#55acee" icon={<CalendarOutlined />} style={{fontSize: 17}}>{moment().format(dateFormat2)}</Tag>
-			<Tag color="#55acee" icon={<FieldTimeOutlined />} style={{fontSize: 17}}>{time.format(timeFormat)}</Tag>
+			
 			</Col>
 			</Row>
 			<Row gutter={[20, 20]}>

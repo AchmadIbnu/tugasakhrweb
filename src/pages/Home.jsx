@@ -29,11 +29,11 @@ return (
 	<p style={{ fontSize: '2vw', wordWrap:'break-word' }}>
 	Achmad Ibnu Rosid | 217441001<br />
 	D4 - Teknologi Rekayasa Otomasi 2021 <br />
-	SISTEM PEMANTAUAN & PREDIKSI PENGGUNAAN LISTRIK RUMAH TANGGA DENGAN 
-	<span style={{fontStyle: 'italic'}}> MACHINE LEARNING</span>
+	"SISTEM PEMANTAUAN & PREDIKSI PENGGUNAAN LISTRIK RUMAH TANGGA DENGAN
+	<span style={{fontStyle: 'italic'}}> MACHINE LEARNING"</span>
 	</p>
 	<p style={{ fontSize: '1.5vw', wordWrap:'break-word',textAlign: 'center' }}>
-	"Pemantauan & Prediksi Listrik Pintar - Cara Baru Menghemat Listrik" <br />
+	"PESILINTAR (Pemantauan & Prediksi Listrik Pintar)" <br />
 	</p>
 	</Col>
 	<Col span={12}>
