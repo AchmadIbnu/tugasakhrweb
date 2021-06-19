@@ -17,6 +17,7 @@ function App() {
   return( <div className="App">
     <Router>
     <Layout>
+    
     <Switch>
     <Route path='/' exact={true} component={Home} />
     <Route path='/dataterkini' exact={true} component={Dataterkini} />

@@ -45,10 +45,10 @@ const columns = [
 	title: 'Jam',
 	dataIndex: 'jam',
 	width: 70,
-	sorter: {
-		compare: (a, b) => a.jam - b.jam,
-		multiple: 2,
-	},
+	// sorter: {
+	// 	compare: (a, b) => a.jam - b.jam,
+	// 	multiple: 2,
+	// },
 },
 {
 	title: 'Jenis Alarm',
@@ -138,13 +138,8 @@ useEffect(()=> {
 
 	})
 	realtime.ref('DataAlarm').on('value', snapshot => {
-		var listAlarm;
-		var objectAlarm = snapshot.val();
-		Object.entries(objectAlarm).forEach(([key, value]) => {
-  console.log("INI OBJECT",`${key} ${value}`); // "a 5", "b 7", "c 9"
-});
-
-		let _filterAlarm = snapshot.val().filter((j)=>
+		var listAlarm = Object.values(snapshot.val());	
+		let _filterAlarm = listAlarm.filter((j)=>
 			j.tanggal.includes(monthAlarm))
 		setDataAlarm(_filterAlarm)
 	})

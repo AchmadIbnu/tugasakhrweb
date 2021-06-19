@@ -38,17 +38,8 @@ import {
 //  Region Import Style
 //  Region Import Constants
 
-// function usePrevious(value){
-// 	const ref = useRef();
-// 	useEffect(()=>{
-// 		ref.current = value;
-// 	});
-// 	return ref.current;
-// }
-
 function Dataterkini() {
 //  react Hooks (useEffect, etc)
-// const classes = useStyles();
 const dateFormat = 'DD/MM/YYYY';
 const dateFormat2 = 'MM/YYYY';
 const timeFormat = 'HH.mm.ss';
@@ -75,38 +66,24 @@ const handleOnChange = (e) => {
 
 const createTodo = () => {
 	console.log(title)
-	if (title != undefined || title != "" || title != Number(""))
-	{
-		realtime
-		.ref(`SisakWh`)
-		.set(parseInt(title))
-		setTitle("");
-		
+	realtime
+	.ref(`SisakWh`)
+	.set(parseInt(title))
+	setTitle("");
+
+	realtime
+	.ref(`Reset`)
+	.set(1)
+
+	setTimeout(() => {  
 		realtime
 		.ref(`Reset`)
-		.set(1)
-		
-		setTimeout(() => {  
-			realtime
-			.ref(`Reset`)
-			.set(0)
-
-			
-		}, 2000);
-
-	}
+		.set(0)
+	}, 2000);
 };
-
-
-
 const loadTime = useCallback(()=>{
 	setTime(moment())
 }, [setTime])
-
-// const handleClick = () => {
-// 	realtime.ref('SisakWh').on('value').set(kwhterkini)
-// 	console.log(kwhterkini)
-// }
 
 const onChangeMonthListrik = (date, dateString) => {
 	setMonthListrik(`${dateString}`)
@@ -132,9 +109,7 @@ useEffect(() => {
 			realtime
 			.ref(`Hasilsisa`)
 			.set(SisakWh - kWhPengurang)
-		// console.log(snapshot.val())
-
-	})
+		})
 		// console.log(snapshot.val())
 	})
 
@@ -172,7 +147,7 @@ return (
 {/* <form> */}
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Masukkan kWh terkini:</Typography.Title>
 <input type="text" onChange={handleOnChange} value={title} id="title"/>
-<button onClick={createTodo}>Perbaharui</button>
+<button onClick={createTodo} disabled={!title}>Perbaharui</button>
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa)} kWh</Typography.Title>
 <p style={{ fontSize: 14, wordWrap:'break-word', marginTop : 0, marginBottom : 1}}>
 *) Perbaharui saat mengisi token listrik
