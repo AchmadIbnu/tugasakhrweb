@@ -51,8 +51,8 @@ const Trigger=()=> {
     console.log("Looping")
     realtime.ref('DataTerkini/kwh').on('value', snapshot => {
       console.log("Pembatas", isOn)
-
       tempkwh = snapshot.val()
+
       realtime.ref('BataskWh').on('value', snapshot => {
         batas = snapshot.val()
 
@@ -94,7 +94,7 @@ const Trigger=()=> {
     realtime.ref('lastupdate').on('value', snapshot => {
       var lastupdate = snapshot.val()
       console.log ("last", moment(lastupdate).format(timeFormat))
-      if (moment(lastupdate).format(timeFormat) == "21:21"){
+      if (moment(lastupdate).format(timeFormat) == "08:00"){
         isOn = false; 
         isOn2 = false; 
         isOn3 = false; 

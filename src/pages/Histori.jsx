@@ -40,14 +40,10 @@ const columns = [
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
 	width: 110,
+	// sorter: (a, b) => new Date(a.tanggal) - new Date(b.tanggal)
 	sorter: {
-		compare: 
-		tanggal.sort(function(a, b){
-			var aa = a.split('/').reverse().join(),
-			bb = b.split('/').reverse().join();
-			// return aa < bb ? -1 : (aa > bb ? 1 : 0);
-		})
-	},
+		compare : (a, b) => moment(a.tanggal).unix() - moment(b.tanggal).unix()
+	}
 },
 {
 	title: 'Jam',
@@ -69,6 +65,9 @@ const columns2 = [
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
 	width: 150,
+	sorter: {
+		compare : (a, b) => moment(a.tanggal).unix() - moment(b.tanggal).unix()
+	}
 },
 {
 	title: 'kWh',
@@ -88,7 +87,6 @@ const columns2 = [
 ];
 
 function Histori() {
-
 //  react Hooks (useEffect, etc)
 const [dataListrik, setDataListrik] = useState([])
 const [dataAlarm, setDataAlarm] = useState([])
