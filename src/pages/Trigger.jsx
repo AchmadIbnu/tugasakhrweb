@@ -57,18 +57,18 @@ const Trigger=()=> {
         batas = snapshot.val()
 
         if (tempkwh >= batas && isOn == false){
-          // setTimeout(() => {  
-            isOn = true;
-            realtime
-            .ref(`DataAlarm`)
-            .push({
-              jam : time.format(timeFormat),
-              jenis : "Alarm Overload",
-              kode : 2,
-              tanggal : moment().format(dateFormat),
-            })
-            
-         // }, 2000);
+         setTimeout(() => {  
+          isOn = true;
+          realtime
+          .ref(`DataAlarm`)
+          .push({
+            jam : time.format(timeFormat),
+            jenis : "Alarm Overload",
+            kode : 2,
+            tanggal : moment().format(dateFormat),
+          })
+
+        }, 2000);
        }
      })
     })
@@ -119,9 +119,8 @@ const Trigger=()=> {
 
   return (
     <>
-    <h1>
-    TRIGGER ON
-    </h1>
+    ---
+    ###
     </>
     );
 

@@ -40,15 +40,20 @@ const columns = [
 	title: 'Tanggal',
 	dataIndex: 'tanggal',
 	width: 110,
+	sorter: {
+		compare: 
+		tanggal.sort(function(a, b){
+			var aa = a.split('/').reverse().join(),
+			bb = b.split('/').reverse().join();
+			// return aa < bb ? -1 : (aa > bb ? 1 : 0);
+		})
+	},
 },
 {
 	title: 'Jam',
 	dataIndex: 'jam',
 	width: 70,
-	// sorter: {
-	// 	compare: (a, b) => a.jam - b.jam,
-	// 	multiple: 2,
-	// },
+	
 },
 {
 	title: 'Jenis Alarm',
@@ -150,8 +155,8 @@ useEffect(()=> {
 
 }, [monthListrik, monthAlarm])
 
-console.log(monthListrik)
-console.log(totalKwh)
+// console.log(monthListrik)
+// console.log(totalKwh)
 
 		//  Function declaration (handle, onchange, etc)
 		const dateFormat = 'MM/YYYY';

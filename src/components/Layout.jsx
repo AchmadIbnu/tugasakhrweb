@@ -36,7 +36,6 @@ const items = [
 { key: '2', label: 'Data Terkini', path: '/dataterkini', icon: <MonitorOutlined/> },
 { key: '3', label: 'Histori', path: '/histori', icon: <ReconciliationOutlined/> },
 { key: '4', label: 'Prediksi', path: '/prediksi', icon: <RobotOutlined/> },
-{ key: '5', label: 'Trigger', path: '/trigger', icon: <RobotOutlined/> },
 ]
 
 function LayoutComp({children}) {
@@ -102,7 +101,7 @@ return (
    <Suspense fallback={loading()}>{children}</Suspense>
    </div>
    </Content>
-   <Footer style={{ textAlign: 'center' }}>PESILINTAR ©2021 Created by <a a target='_blank' rel='noopener noreferrer' href="https:mampir.in/AboutOnnu"> Achmad Ibnu Rosid</a></Footer>
+   <Footer style={{ textAlign: 'center' }}>PESILINTAR ©2021 Created by <a a target='_blank' rel='noopener noreferrer' href="https://mampir.in/AboutOnnu"> Achmad Ibnu Rosid</a></Footer>
    </Layout>
    </Layout>
    );

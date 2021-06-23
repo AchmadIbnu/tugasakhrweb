@@ -53,7 +53,7 @@ const [kwhpengurang]=useState([])
 const [time, setTime] = useState(moment())
 const [isOn, setValue] = useState(false)
 const [HasilSisa, setDatasisa]=useState([])
-// const HasilSisa = datakwh - kWhPengurang;
+
 
 const [dataListrik, setDataListrik] = useState([])
 const [monthListrik, setMonthListrik] = useState('')
@@ -68,7 +68,7 @@ const createTodo = () => {
 	console.log(title)
 	realtime
 	.ref(`SisakWh`)
-	.set(parseInt(title))
+	.set(parseFloat(title).toFixed(2))
 	setTitle("");
 
 	realtime
@@ -148,7 +148,7 @@ return (
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Masukkan kWh terkini:</Typography.Title>
 <input type="text" onChange={handleOnChange} value={title} id="title"/>
 <button onClick={createTodo} disabled={!title}>Perbaharui</button>
-<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa)} kWh</Typography.Title>
+<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa).toFixed(2)} kWh</Typography.Title>
 <p style={{ fontSize: 14, wordWrap:'break-word', marginTop : 0, marginBottom : 1}}>
 *) Perbaharui saat mengisi token listrik
 </p>
