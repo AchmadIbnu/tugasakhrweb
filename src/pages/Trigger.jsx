@@ -67,7 +67,7 @@ const Trigger=()=> {
             kode : 2,
             tanggal : moment().format(dateFormat),
           })
-
+          console.log("Overload")
         }, 2000);
        }
      })
@@ -86,6 +86,7 @@ const Trigger=()=> {
            kode : 1,
            tanggal : moment().format(dateFormat),
          })
+          console.log("Listrik Low")
           isOn2 = true;
         }, 2000);
       }
@@ -110,6 +111,7 @@ const Trigger=()=> {
             kode : 3,
             tanggal : moment().format(dateFormat),
           })
+          console.log("Disconnected")
           isOn3 = true;
         }, 2000);
       }

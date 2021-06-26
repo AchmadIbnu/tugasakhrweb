@@ -53,7 +53,7 @@ const [kwhpengurang]=useState([])
 const [time, setTime] = useState(moment())
 const [isOn, setValue] = useState(false)
 const [HasilSisa, setDatasisa]=useState([])
-
+const [LastUpdate, setLastUpdate]=useState([])
 
 const [dataListrik, setDataListrik] = useState([])
 const [monthListrik, setMonthListrik] = useState('')
@@ -93,7 +93,6 @@ useEffect(() => {
 	realtime.ref('DataTerkini').on('value', snapshot => {
 		setData(snapshot.val())
 		setValue(true)
-
 	})
 	realtime.ref('DataLog').on('value', snapshot => {
 		let _filterLog = snapshot.val().filter((i)=>
@@ -101,7 +100,7 @@ useEffect(() => {
 		setDataListrik(_filterLog)
 
 	})
-	
+
 	realtime.ref('SisakWh').on('value', snapshot => {
 		var SisakWh =snapshot.val();
 		realtime.ref('kWhPengurang').on('value', snapshot => {
@@ -115,8 +114,11 @@ useEffect(() => {
 
 	realtime.ref('Hasilsisa').on('value', snapshot => {
 		setDatasisa(snapshot.val())
-
 		// console.log(snapshot.val())
+	})
+	realtime.ref('lastupdate').on('value', snapshot => {
+		setLastUpdate(snapshot.val())
+		console.log(snapshot.val())
 	})
 	setInterval(()=>{
 		loadTime()
@@ -150,7 +152,7 @@ return (
 <button onClick={createTodo} disabled={!title}>Perbaharui</button>
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa).toFixed(2)} kWh</Typography.Title>
 <p style={{ fontSize: 14, wordWrap:'break-word', marginTop : 0, marginBottom : 1}}>
-*) Perbaharui saat mengisi token listrik
+*) Perbaharui saat mengisi token listrik dan saat alat baru aktif kembali dari disconnected
 </p>
 {/* </form> */}
 </Card>
@@ -163,6 +165,7 @@ return (
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Daya            : {parseFloat(data.p).toFixed(2)} Watt</Typography.Title>
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Power Faktor    : {data.pf}</Typography.Title>
 <Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Frekuensi       : {parseFloat(data.fq).toFixed(2)} Hz</Typography.Title>
+<Typography.Title style={{marginTop : 0, marginBottom : 3}} level={5}>Last Update     : {(LastUpdate)}</Typography.Title>
 </Card>
 </Row>
 </Col>

@@ -41,15 +41,19 @@ const columns = [
 	dataIndex: 'tanggal',
 	width: 110,
 	// sorter: (a, b) => new Date(a.tanggal) - new Date(b.tanggal)
+	// compare : (a, b) => moment(a.tanggal).unix() - moment(b.tanggal).unix()
 	sorter: {
-		compare : (a, b) => moment(a.tanggal).unix() - moment(b.tanggal).unix()
+		
+		compare : (a, b) => a.tanggal.localeCompare(b.tanggal)
 	}
 },
 {
 	title: 'Jam',
 	dataIndex: 'jam',
 	width: 70,
-	
+	sorter: {
+		compare : (a, b) => a.jam.localeCompare(b.jam)
+	}
 },
 {
 	title: 'Jenis Alarm',
@@ -66,7 +70,7 @@ const columns2 = [
 	dataIndex: 'tanggal',
 	width: 150,
 	sorter: {
-		compare : (a, b) => moment(a.tanggal).unix() - moment(b.tanggal).unix()
+		compare : (a, b) => a.tanggal.localeCompare(b.tanggal)
 	}
 },
 {

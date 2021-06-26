@@ -27,6 +27,7 @@ import {
 		FieldTimeOutlined,
 		CalendarOutlined
 	} from '@ant-design/icons';
+	import { realtime } from '../firebase'
 	
 
 //  Region Import Utility/Helper Function
@@ -38,17 +39,21 @@ import {
 //  Region Import Style
 
 //  Region Import Constants
-var hasilprediksi = 0, konversirupiah = 0; 
+var hasilprediksi = 0, ratarata = 0, ratarata2 = 0, konversirupiah = 0; 
 var isOn = false;
 const data = [0];
-function Prediksi() {
-//  react Hooks (useEffect, etc)
 
-console.log(data)
+function Prediksi() {
+
+	// const [hasilprediksi, setDataPrediksi]=useState([])
+	konversirupiah = hasilprediksi * 1444.7;
+	console.log(data)
+
 //  Function declaration (handle, onchange, etc)
 const dateFormat = 'DD/MM/YYYY';
 const timeFormat = 'HH.mm.ss';
 const [time, setTime] = useState(moment())
+const [disable, setDisable] = React.useState(false);
 
 
 const loadTime = useCallback(()=>{
@@ -56,8 +61,18 @@ const loadTime = useCallback(()=>{
 }, [setTime])
 
 const handleClick = () => {
-	hasilprediksi = 299.67;
-	konversirupiah = hasilprediksi * 1444.7;
+	setDisable(true)
+	realtime
+	.ref('TotalkWhPrediksi')
+	.on('value', snapshot => {
+		hasilprediksi = snapshot.val()
+		ratarata = parseFloat(hasilprediksi / 30).toFixed(2);
+		ratarata2 = parseFloat(ratarata).toFixed(2);
+		realtime
+		.ref(`BataskWh`)
+		.set(ratarata)
+	})
+
 	isOn = true;
 	console.log(data)
 	// setTimeout(() => {  
@@ -66,7 +81,7 @@ const handleClick = () => {
 if (isOn == false){
 	const data = [0];
 }
-else {
+else if (isOn == true){
 	const data = [
 	{
 		name: "Senin",
@@ -107,6 +122,11 @@ else {
 	];
 }
 useEffect(() => {
+	// realtime
+	// .ref('TotalkWhPrediksi')
+	// .on('value', snapshot => {
+	// 	setDataPrediksi(snapshot.val())
+	// })
 	setInterval(()=>{
 		loadTime()
 	}, 1000)
@@ -174,11 +194,13 @@ return (
 	<Typography.Title level={5}>{`Besar kWh Listrik 30 Hari yang akan datang ialah :` }</Typography.Title>
 	<Typography.Title level={5}>{parseFloat(hasilprediksi).toFixed(2)} kWh</Typography.Title>
 	<Typography.Title level={5}>{`Atau Setara dengan :` }</Typography.Title>
-	<Typography.Title level={5}>Konversi : Rp. {parseFloat(konversirupiah).toLocaleString("en-US",{maximumFractionDigits:0})} ,- </Typography.Title>
+	<Typography.Title level={5}>Rp. {parseFloat(konversirupiah).toLocaleString("en-US",{maximumFractionDigits:0})} ,- </Typography.Title>
+	<Typography.Title level={5}>Disarankan batas pemakaian {parseFloat(ratarata).toFixed(2)} kWh/hari</Typography.Title>
 	<p style={{marginTop : 0, marginBottom : 0}}>
 	*)Tidak termasuk PPJ & Biaya Admin Bank (1kWh = Rp. 1,444.7)	 
 </p>
-<button onClick={handleClick}>Lakukan Prediksi</button>
+<button disabled={disable} onClick={handleClick}>Lakukan Prediksi 1</button><button disabled={disable} onClick={handleClick}>Lakukan Prediksi 2</button>
+
 </Card>
 </Row>
 </Col>
