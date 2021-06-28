@@ -29,94 +29,153 @@ import {
   CalendarOutlined
 } from '@ant-design/icons';
 
-var isOn = false;
-var isOn2 = false;
-var isOn3 = false;
+let Trig1 ;
+let Trig2 ;
+let Trig3 ;
 
 const Trigger=()=> {
-  const timeFormat = 'HH:mm';
+  const timeFormat = 'HH:mm:ss';
   const dateFormat = 'DD/MM/YYYY';
-  const [time, setTime] = useState(moment())
-  const loadTime = useCallback(()=>{
-    setTime(moment())
-    console.log("Jam",time.format(timeFormat))
-  }, [setTime])
+  const dateFormat2 = 'DD';
+  const dateFormat3 = 'MM';
+  let timeBatas;
 
+  const clockTime=useCallback(()=>{
+    timeBatas = moment().format(timeFormat);
+    // console.log("Waktu Sekarang:",timeBatas);
+    // console.log(Trig1);
+    if(timeBatas == "08:00:00"){
+      realtime
+      .ref(`Trigger/Trig1`)
+      .set(false)
+      realtime
+      .ref(`Trigger/Trig2`)
+      .set(false)
+      realtime
+      .ref(`Trigger/Trig3`)
+      .set(false)
+    }
+  })
 
   
-
   useEffect(() => {
-    var tempkwh;
-    var batas;
-    console.log("Looping")
-    realtime.ref('DataTerkini/kwh').on('value', snapshot => {
-      console.log("Pembatas", isOn)
-      tempkwh = snapshot.val()
+    setInterval(()=>{
+      clockTime();
+    }, 1000)
 
-      realtime.ref('BataskWh').on('value', snapshot => {
-        batas = snapshot.val()
-
-        if (tempkwh >= batas && isOn == false){
-         setTimeout(() => {  
-          isOn = true;
-          realtime
-          .ref(`DataAlarm`)
-          .push({
-            jam : time.format(timeFormat),
-            jenis : "Alarm Overload",
-            kode : 2,
-            tanggal : moment().format(dateFormat),
-          })
-          console.log("Overload")
-        }, 2000);
-       }
-     })
-    })
-
-
+    realtime.ref('Trigger/Trig1').on('value', snapshot =>{
+      Trig1 = snapshot.val();
+      // console.log("Trig1",Trig1);     
+    }) 
+    realtime.ref('Trigger/Trig2').on('value', snapshot =>{
+      Trig2 = snapshot.val();
+      // console.log("Trig2",Trig2);     
+    }) 
+    realtime.ref('Trigger/Trig3').on('value', snapshot =>{
+      Trig3 = snapshot.val();
+      // console.log("Trig3",Trig3);     
+    }) 
+    
+    //Listrik Low
     realtime.ref('Hasilsisa').on('value', snapshot =>{
-      var Hasilsisa = snapshot.val()
-      if (Hasilsisa <= 5 && isOn2 == false){
-        setTimeout(() => {  
-          realtime
-          .ref('DataAlarm')
-          .push({
-           jam : time.format(timeFormat),
-           jenis : "Listrik Low",
-           kode : 1,
-           tanggal : moment().format(dateFormat),
-         })
-          console.log("Listrik Low")
-          isOn2 = true;
-        }, 2000);
+      let hasilsisa = snapshot.val();
+      // console.log("Hasilsisa", hasilsisa)
+      if(hasilsisa<= 5 && Trig1==false)
+       {  realtime
+        .ref('DataAlarm')
+        .push({
+          jam : moment().format(timeFormat),
+          jenis : "Listrik Low",
+          kode : 1,
+          tanggal : moment().format(dateFormat),
+        })
+        console.log("Alarm Listrik Low ", moment().format(timeFormat));
+        realtime
+        .ref(`Trigger/Trig1`)
+        .set(true)
       }
     })
 
-    realtime.ref('lastupdate').on('value', snapshot => {
-      var lastupdate = snapshot.val()
-      console.log ("last", moment(lastupdate).format(timeFormat))
-      if (moment(lastupdate).format(timeFormat) == "08:00"){
-        isOn = false; 
-        isOn2 = false; 
-        isOn3 = false; 
-      }
-      var WaktuSekarang = localStorage.getItem ("WaktuSekarang")
-      if (lastupdate < WaktuSekarang && isOn3==false){
-        setTimeout(() => {  
-          realtime
-          .ref(`DataAlarm`)
-          .push({
-            jam : time.format(timeFormat),
-            jenis : "Disconnected",
-            kode : 3,
-            tanggal : moment().format(dateFormat),
-          })
-          console.log("Disconnected")
-          isOn3 = true;
-        }, 2000);
-      }
-    })
+   //Overload
+   let bataskwh;
+   realtime.ref('BataskWh').on('value', snapshot =>{
+     bataskwh = snapshot.val();
+     //console.log("BataskWh",bataskwh);     
+   })           
+   realtime.ref('DataTerkini/kwh').on('value', snapshot =>{
+    let tempkwh = snapshot.val();
+    // console.log("DataTerkini/kwh", tempkwh)
+    if(tempkwh>= bataskwh && Trig2==false)
+     {  realtime
+      .ref('DataAlarm')
+      .push({
+        jam : moment().format(timeFormat),
+        jenis : "Alarm Overload",
+        kode : 2,
+        tanggal : moment().format(dateFormat),
+      })
+      console.log("Alarm Overload ", moment().format(timeFormat));
+      realtime
+      .ref(`Trigger/Trig2`)
+      .set(true) 
+    }
   })
+
+
+
+   //Disconnect
+   let dataUpdateTanggal;
+   let dataUpdateBulan;
+   let tanggalSekarang = moment().format(dateFormat2);
+   let bulanSekarang = moment().format(dateFormat3);
+   let lastupdate;
+   let waktuSekarang;
+
+   realtime.ref('lastupdate').on('value', snapshot =>{
+    let lastupdate = snapshot.val();
+    let waktuSekarang = moment().subtract(10, 'second').format(timeFormat);
+    realtime.ref('lastupdate2').on('value', snapshot =>{
+      dataUpdateTanggal = snapshot.val();
+            // console.log("lastupdatetanggal", dataUpdateTanggal);
+          })
+    realtime.ref('lastupdate3').on('value', snapshot =>{
+      dataUpdateBulan = snapshot.val();
+            // console.log("lastupdatebulan", dataUpdateBulan);
+          })
+    
+    if(lastupdate < waktuSekarang || 
+      dataUpdateTanggal != tanggalSekarang ||
+      dataUpdateBulan != bulanSekarang &&
+      Trig3==false)
+    // if(lastupdate<= "20:00:00" && Trig3==false)
+  { 
+    realtime
+    .ref('DataAlarm')
+    .push({
+      jam : moment().format(timeFormat),
+      jenis : "Disconnected",
+      kode : 3,
+      tanggal : moment().format(dateFormat),
+    })
+    console.log("Disconnected ", moment().format(timeFormat));
+    realtime
+    .ref(`Trigger/Trig3`)
+    .set(true)
+  }
+  else if (lastupdate > waktuSekarang && 
+    dataUpdateTanggal == tanggalSekarang &&
+    dataUpdateBulan == bulanSekarang &&
+    Trig3==true)
+   // else if (lastupdate >= "20:00:00" && Trig3==true)
+ {
+  console.log("Reconnected", moment().format(timeFormat));
+  realtime
+  .ref(`Trigger/Trig3`)
+  .set(false)
+}
+})
+
+ })
 
 
   return (

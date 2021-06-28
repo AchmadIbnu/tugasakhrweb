@@ -41,8 +41,12 @@ const items = [
 function LayoutComp({children}) {
   const timeFormat = 'HH:mm:ss';
   const dateFormat = 'DD/MM/YYYY';
+  const dateFormat2 = 'DD';
+  const dateFormat3 = 'MM';
   const [time, setTime] = useState(moment())
-  const [dataUpdate, setDataUpdate]=useState([])
+  const [dataUpdateJam, setDataUpdate]=useState([])
+  const [dataUpdateTanggal, setDataUpdate2]=useState([])
+  const [dataUpdateBulan, setDataUpdate3]=useState([])
 //  Function declaration (handle, onchange, etc)
 const location = useLocation()
 const history = useHistory()
@@ -62,13 +66,20 @@ useEffect(() => {
   realtime.ref('lastupdate').on('value', snapshot => {
     setDataUpdate(snapshot.val())
   })
+  realtime.ref('lastupdate2').on('value', snapshot => {
+    setDataUpdate2(snapshot.val())
+  })
+  realtime.ref('lastupdate3').on('value', snapshot => {
+    setDataUpdate3(snapshot.val())
+  })
   setInterval(()=>{
     loadTime()
   }, 1000)
-}, [location, dataUpdate])
+}, [location, dataUpdateJam])
 
 let waktuSekarang = moment().subtract(10, 'second').format(timeFormat)
 localStorage.setItem ("WaktuSekarang", waktuSekarang)
+
 return (
   <Layout>
   <Sider
@@ -78,6 +89,7 @@ return (
   >
   <h1 style={{ fontSize: '2.5vw', fontWeight: 'bold', wordWrap:'break-word', textAlign: 'center' }}>
   PESILINTAR <br />
+  
   </h1>
   <img src={imgIcon} alt="" style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}/>
   <h2 style={{ fontSize: '2vw', fontWeight: 'bold', wordWrap:'break-word', textAlign: 'center' }}>
@@ -87,7 +99,7 @@ return (
   {items.map((item) => (
    <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
    ))}
-   {dataUpdate > waktuSekarang ? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}  alt='gambar koneksi on' /> : 
+   {dataUpdateJam > waktuSekarang && dataUpdateTanggal == moment().format(dateFormat2) && dataUpdateBulan == moment().format(dateFormat3)? <img src={imgKoneksion} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}}  alt='gambar koneksi on' /> : 
    <img src={imgKoneksioff} style={{maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0}} alt='gambar koneksi off'/>}
    <Tag color="#55acee" icon={<CalendarOutlined />} style={{fontColor: 'ffff', fontSize: 17, marginLeft: 28, marginTop : 5}}>{moment().format(dateFormat)}</Tag>
    <Tag color="#55acee"  icon={<FieldTimeOutlined />} style={{fontSize: 17, marginLeft: 40, marginTop : 5}}>{time.format(timeFormat)}</Tag>
