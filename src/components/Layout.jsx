@@ -77,8 +77,9 @@ useEffect(() => {
   }, 1000)
 }, [location, dataUpdateJam])
 
-let waktuSekarang = moment().subtract(10, 'second').format(timeFormat)
-localStorage.setItem ("WaktuSekarang", waktuSekarang)
+// let waktuSekarang = moment().subtract(10, 'second').format(timeFormat)
+let waktuSekarang = moment().format(timeFormat)
+// localStorage.setItem ("WaktuSekarang", waktuSekarang)
 
 return (
   <Layout>
