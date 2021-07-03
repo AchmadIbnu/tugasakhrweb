@@ -47,14 +47,14 @@ function Prediksi() {
 
 	// const [hasilprediksi, setDataPrediksi]=useState([])
 	konversirupiah = hasilprediksi * 1444.7;
-	console.log(data)
+	// console.log(data)
 
 //  Function declaration (handle, onchange, etc)
 const dateFormat = 'DD/MM/YYYY';
 const timeFormat = 'HH.mm.ss';
 const [time, setTime] = useState(moment())
 const [disable, setDisable] = React.useState(false);
-
+const [datagambar, setDataGambar]=useState([])
 
 const loadTime = useCallback(()=>{
 	setTime(moment())
@@ -74,7 +74,7 @@ const handleClick = () => {
 	})
 
 	isOn = true;
-	console.log(data)
+	// console.log(data)
 	// setTimeout(() => {  
 	// }, 2000);
 };
@@ -127,6 +127,11 @@ useEffect(() => {
 	// .on('value', snapshot => {
 	// 	setDataPrediksi(snapshot.val())
 	// })
+
+	realtime.ref('Prediksi/datagambar').on('value', snapshot => {
+		setDataGambar(snapshot.val())
+		console.log('datagambar:', datagambar)
+	})
 	setInterval(()=>{
 		loadTime()
 	}, 1000)
@@ -207,47 +212,13 @@ return (
 <Col lg={16} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24  }} md={{ order: 2 }}>
 <Card  bordered={false} style={{ minWidth: '100%' }}>
 <Typography.Title level={5}>GRAFIK PREDIKSI <span style={{fontStyle: 'italic'}}> ML Regression Linear</span></Typography.Title>
+<img src={datagambar} alt="" style={{maxWidth: '75%', maxHeight: '75%'}}/>
 
-<ResponsiveContainer width="99%" height={350}>
-<LineChart
-data={data}
-margin={{
-	top: 5,
-	right: 45,
-	left: 0,
-	bottom: 10
-}}
->
-<CartesianGrid strokeDasharray="3 3" />
-<XAxis dataKey="name"  dy={1}>
-<Label value='Hari' offset={2} position='bottom'  dy={20}/>
-</XAxis>
-<YAxis label={{ 
-	value: "Energi Listrik (kWh)", 
-	position: "insideLeft", 
-	angle: -90,   
-	dy: 30}} />
-	<Tooltip />
-	<Legend />
-	<Line
-	type="monotone"
-	dataKey="kWh"
-	stroke="#8884d8"
-	activeDot={{ r: 8 }}
-	/>
-	<Line
-	type="monotone"
-	dataKey="prediksi"
-	stroke="#82ca9d"
-	activeDot={{ r: 8 }}
-	/>
-	</LineChart>
-	</ResponsiveContainer>
-	</Card>
-	</Col>
-	</Row>
-	</>
-	);
+</Card>
+</Col>
+</Row>
+</>
+);
 }
 
 export default Prediksi
