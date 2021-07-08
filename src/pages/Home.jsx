@@ -33,7 +33,7 @@ return (
 	<span style={{fontStyle: 'italic'}}> MACHINE LEARNING"</span>
 	</p>
 	<p style={{ fontSize: '1.5vw', wordWrap:'break-word',textAlign: 'center' }}>
-	"PESILINTAR (Pemantauan & Prediksi Listrik Pintar)" <br />
+	-PESILINTAR (Pemantauan & Prediksi Listrik Pintar)- <br />
 	</p>
 	</Col>
 	<Col span={12}>
