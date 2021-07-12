@@ -143,7 +143,7 @@ function Dataterkini() {
 				<Col lg={{ span: 6, offset: 4 }}>
 				</Col>
 			</Row>
-			<Row gutter={[16, 20]}>
+			<Row gutter={[10, 10]}>
 				<Col xs={24} sm={24} md={24} lg={8}>
 					<Row style={{ marginBottom: 0 }}>
 						<Card bordered={false} style={{ minWidth: '100%', minHeight: '50%' }}>
@@ -151,8 +151,8 @@ function Dataterkini() {
 							<input type="text" onChange={handleOnChange} value={title} id="title" />
 							<Button icon={<SyncOutlined />} onClick={createTodo} disabled={!title}></Button>
 							<Typography.Title style={{ marginTop: 0, marginBottom: 3 }} level={5}>Pulsa Listrik Tersisa : {parseFloat(HasilSisa).toFixed(2)} kWh</Typography.Title>
-							<p style={{ fontSize: 14, wordWrap: 'break-word', marginTop: 0, marginBottom: 0 }}>
-								*) Perbaharui saat mengisi token listrik dan saat alat baru aktif kembali dari disconnected
+							<p style={{ fontSize: 13, wordWrap: 'break-word', marginTop: 0, marginBottom: 0 }}>
+								*) Perbaharui saat mengisi token listrik. Isi sesuai tampilan meteran listrik, contoh: <span style={{fontWeight: 'bold' }}> 67.89</span>
 							</p>
 						</Card>
 						<Card bordered={true} style={{ minWidth: '100%', minHeight: '50%' }}>
@@ -173,32 +173,32 @@ function Dataterkini() {
 						<Typography.Title level={5}>GRAFIK PENGGUNAAN LISTRIK HARIAN
 							<DatePicker style={{ float: 'right' }} picker='month' onChange={onChangeMonthListrik} format={dateFormat2} />
 						</Typography.Title>
-						<ResponsiveContainer width="100%" height={350}>
+						<ResponsiveContainer width="100%" height={373}>
 							<LineChart
 								data={dataListrik}
 								margin={{
 									top: 20,
 									right: 45,
 									left: 0,
-									bottom: 15
+									bottom: 16
 								}}
 							>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="tanggal" dy={1}>
-									<Label value='Tanggal' offset={2} position='bottom' dy={20} />
+									<Label value='Tanggal' offset={0} position='bottom' dy={3} />
 								</XAxis>
 								<YAxis label={{
 									value: "Energi Listrik (kWh)",
 									position: "insideLeft",
 									angle: -90,
-									dy: 30
+									dy: 35
 								}} />
 								<Tooltip />
-								<Legend />
+								<Legend layout="horizontal" verticalAlign="top" align="center" />
 								<Line
 									type="monotone"
 									dataKey="nilai"
-									stroke="#8884d8"
+									stroke="#0c64a4"
 									activeDot={{ r: 8 }}
 								/>
 							</LineChart>

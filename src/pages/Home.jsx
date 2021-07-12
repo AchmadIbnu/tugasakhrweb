@@ -2,23 +2,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Col, Row } from 'antd';
 import imgHome from '../assets/Monochromatic.png';
-//  Region Import Utility/Helper Function
-
-//  Region Import Components
-
-//  Region Import Assets
-
-//  Region Import Style
-
-//  Region Import Constants
 
 function Home() {
-
-//  react Hooks (useEffect, etc)
-
-//  Function declaration (handle, onchange, etc)
-
-
 return (
 	<>
 	<Row>

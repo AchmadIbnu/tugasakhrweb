@@ -5,6 +5,7 @@ import { HomeOutlined, MonitorOutlined, ReconciliationOutlined, RobotOutlined } 
 import imgIcon from '../assets/polman.png';
 import imgKoneksion from '../assets/koneksion.svg';
 import imgKoneksioff from '../assets/koneksioff.svg';
+import imgBg from '../assets/logout.png';
 import {
   Layout,
   Menu,
@@ -12,7 +13,10 @@ import {
   Tag,
   TimePicker,
   Spin,
-  Button
+  Button,
+  Card,
+  Modal,
+  Image
 } from 'antd';
 import moment from 'moment';
 import { realtime } from '../firebase'
@@ -22,16 +26,6 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 const { Header, Content, Footer, Sider } = Layout;
-//  Region Import Utility/Helper Function
-
-//  Region Import Components
-
-//  Region Import Assets
-
-//  Region Import Style
-
-//  Region Import Constants
-
 const loading = () =>
   <div class="center">
     <Spin size="large" />
@@ -53,22 +47,30 @@ function LayoutComp({ children }) {
   const [dataUpdateJam, setDataUpdate] = useState([])
   const [dataUpdateTanggal, setDataUpdate2] = useState([])
   const [dataUpdateBulan, setDataUpdate3] = useState([])
-  //  Function declaration (handle, onchange, etc)
   const location = useLocation()
   const history = useHistory()
   const [selectedKey, setSelectedKey] = useState(items.find(o => o.path === location.pathname).key)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
   const onClickMenu = (item) => {
     const clicked = items.find(_item => _item.key === item.key)
     history.push(clicked.path)
-    console.log("cek click", clicked.path)
+    console.log("loc", location)
+    console.log("loc.path", location.pathname)
+    console.log("click", clicked.path)
   }
 
   const loadTime = useCallback(() => {
     setTime(moment())
   }, [setTime])
+
+  const modalUp = () => {
+    setIsModalVisible(true)
+  }
+
   const logout = () => {
     localStorage.setItem("hasLogin", false);
-    window.location.href = "http://localhost:3000/login";
+    window.location.reload();
   };
 
   //  react Hooks (useEffect, etc)
@@ -87,51 +89,69 @@ function LayoutComp({ children }) {
       loadTime()
     }, 1000)
   }, [location, dataUpdateJam])
-
-  // let waktuSekarang = moment().subtract(10, 'second').format(timeFormat)
   let waktuSekarang = moment().format(timeFormat)
-  // localStorage.setItem ("WaktuSekarang", waktuSekarang)
 
   return (
-    <Layout>
-      <Sider
-        className="site-layout-background"
-        breakpoint="lg"
-        collapsedWidth="0"
+    <>
+      <Modal title=""
+        visible={isModalVisible}
+        bodyStyle={{ backgroundColor: '#FFFF' }}
+        // footer={null}
+        onOk={() => {
+          logout();
+        }}
+        onCancel={() => {
+          setIsModalVisible(false);
+        }}
+        width={550}
       >
-        <h1 style={{ fontSize: '2.5vw', fontWeight: 'bold', wordWrap: 'break-word', textAlign: 'center' }}>
-          PESILINTAR <br />
-
-        </h1>
-        <img src={imgIcon} alt="" style={{ maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0 }} />
-        <h2 style={{ fontSize: '2vw', fontWeight: 'bold', wordWrap: 'break-word', textAlign: 'center' }}>
-          POLMAN BANDUNG <br />
-        </h2>
-        <Menu theme='light' selectedKeys={[selectedKey]} mode='inline' onClick={onClickMenu}>
-          {items.map((item) => (
-            <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
-          ))}
-          {dataUpdateJam > waktuSekarang && dataUpdateTanggal == moment().format(dateFormat2) && dataUpdateBulan == moment().format(dateFormat3) ? <img src={imgKoneksion} style={{ maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0 }} alt='gambar koneksi on' /> :
-            <img src={imgKoneksioff} style={{ maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0 }} alt='gambar koneksi off' />}
-          <Tag color="#55acee" icon={<CalendarOutlined />} style={{ fontColor: 'ffff', fontSize: 17, marginLeft: 28, marginTop: 5 }}>{moment().format(dateFormat)}</Tag>
-          <Tag color="#55acee" icon={<FieldTimeOutlined />} style={{ fontSize: 17, marginLeft: 40, marginTop: 5 }}>{time.format(timeFormat)}</Tag>
-          <Button style={{ fontSize: 14, marginLeft: 42, marginTop: 15 }} icon={<LogoutOutlined />} align="middle" type="primary" shape="round" size="middle" danger onClick={() => {
-            logout();
-          }}>Logout
-          </Button>
-        </Menu>
-      </Sider>
+        <Card hoverable cover={<img alt="" src={imgBg} />} style={{ textAlign: 'center' }} >
+          <h1 style={{ fontSize: '2vw', wordWrap: 'break-word', fontWeight: 'bold' }}>
+            Apakah anda yakin untuk keluar?
+          </h1>
+        </Card>
+      </Modal>
       <Layout>
-        <Content style={{ margin: "24px 16px 0" }}>
-          <div
-            style={{ padding: 24, minHeight: 360 }}
-          >
-            <Suspense fallback={loading()}>{children}</Suspense>
-          </div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>PESILINTAR ©2021 Created by <a a target='_blank' rel='noopener noreferrer' href="https://mampir.in/AboutOnnu"> Achmad Ibnu Rosid</a></Footer>
+        <Sider
+          className="site-layout-background"
+          breakpoint="lg"
+          collapsedWidth="0"
+        >
+          <h1 style={{ fontSize: '2.5vw', fontWeight: 'bold', wordWrap: 'break-word', textAlign: 'center' }}>
+            PESILINTAR <br />
+          </h1>
+          <img src={imgIcon} alt="" style={{ maxWidth: '60%', maxHeight: '60%', marginLeft: 40, marginTop: 0 }} />
+          <h2 style={{ fontSize: '2vw', fontWeight: 'bold', wordWrap: 'break-word', textAlign: 'center' }}>
+            POLMAN BANDUNG <br />
+          </h2>
+          <Menu theme='light' selectedKeys={[selectedKey]} mode='inline' onClick={onClickMenu}>
+            {items.map((item) => (
+              <Menu.Item key={item.key} icon={item.icon}>{item.label}</Menu.Item>
+            ))}
+          </Menu>
+          <Card style={{ marginTop: 0, padding: 0, textAlign: 'center' }} >
+            {dataUpdateJam > waktuSekarang && dataUpdateTanggal == moment().format(dateFormat2) && dataUpdateBulan == moment().format(dateFormat3) ?
+              <img src={imgKoneksion} style={{ maxWidth: '60%', maxHeight: '60%', marginTop: 0 }} alt='gambar koneksi on' /> :
+              <img src={imgKoneksioff} style={{ maxWidth: '60%', maxHeight: '60%', marginTop: 0 }} alt='gambar koneksi off' />}
+            <Tag color="#55acee" icon={<CalendarOutlined />} style={{ fontColor: 'ffff', fontSize: 17, marginTop: 5 }}>{moment().format(dateFormat)}</Tag>
+            <Tag color="#55acee" icon={<FieldTimeOutlined />} style={{ fontSize: 17, marginTop: 5 }}>{time.format(timeFormat)}</Tag>
+            <Button style={{ fontSize: 14, marginTop: 7 }} icon={<LogoutOutlined />} align="middle" type="primary" shape="round" size="middle" danger onClick={() => {
+              modalUp();
+            }}>Logout
+            </Button>
+          </Card>
+
+        </Sider>
+        <Layout>
+          <Content style={{ margin: "24px 16px 0" }}>
+            <div style={{ padding: 24, minHeight: 360 }}>
+              <Suspense fallback={loading()}>{children}</Suspense>
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>PESILINTAR ©2021 Created by <a a target='_blank' rel='noopener noreferrer' href="https://mampir.in/AboutOnnu"> Achmad Ibnu Rosid</a></Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
   );
 }
 

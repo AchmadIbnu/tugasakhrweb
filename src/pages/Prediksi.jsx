@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { css } from "@emotion/react";
 import imgPrediksi from '../assets/prediksihitam.svg'
 import imgBg from '../assets/background.png';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import {
 	Col,
 	Row,
@@ -62,7 +63,7 @@ function Prediksi() {
 	const [isModalVisible, setIsModalVisible] = useState(true)
 	let [loading, setLoading] = useState(false);
 	let [color, setColor] = useState("#ffffff");
-
+	let [selesai, setSelesai] = useState(false);
 	const IconFont = createFromIconfontCN({
 		scriptUrl: [
 			'//at.alicdn.com/t/font_1788592_a5xf2bdic3u.js', // icon-shoppingcart, icon-python
@@ -73,7 +74,7 @@ function Prediksi() {
 		setTime(moment())
 	}, [setTime])
 	const batalPrediksi = () => {
-		window.location.href = "http://localhost:3000";
+		setIsModalVisible(false)
 	};
 	const handleClick = () => {
 		setLoading(true);
@@ -88,8 +89,7 @@ function Prediksi() {
 				console.log(selesai)
 				if (selesai == true) {
 					setIsModalVisible(false)
-					// setShowAlert(false)
-					// setLoading(false)
+					setSelesai(true)
 					realtime
 						.ref(`Prediksi/selesai`)
 						.set(false)
@@ -136,7 +136,7 @@ function Prediksi() {
 		<>
 			<Modal title=""
 				visible={isModalVisible}
-				bodyStyle={{ backgroundColor: '#FFFF', padding : 30}}
+				bodyStyle={{ backgroundColor: '#FFFF' }}
 				footer={null}
 				onOk={() => {
 					handleClick();
@@ -144,14 +144,14 @@ function Prediksi() {
 				onCancel={() => {
 					batalPrediksi()
 				}}
-				width={1000}
+				width={850}
 			>
 				<Card hoverable cover={<img alt="" src={imgBg} />} style={{ textAlign: 'center' }} >
 					{(loading === false) ?
 						<><h1 style={{ fontSize: '2vw', wordWrap: 'break-word', fontWeight: 'bold' }}>
 							Butuh beberapa saat untuk melakukan prediksi, tekan tombol untuk memulai prediksi
 						</h1>
-							<Button icon={<IconFont type="icon-python"/>} align="middle" type="primary" shape="round" size="large" onClick={() => {
+							<Button icon={<IconFont type="icon-python" />} align="middle" type="primary" shape="round" size="large" onClick={() => {
 								handleClick();
 							}}>PREDIKSI
 							</Button>
@@ -165,57 +165,91 @@ function Prediksi() {
 					}
 				</Card>
 			</Modal>
-		
-			<Row>
-				<Col xs={{ span: 12 }} lg={{ span: 12 }}>
-					<p style={{ fontSize: '2vw', wordWrap: 'break-word', fontWeight: 'bold' }}>
-						<img src={imgPrediksi} style={{ maxWidth: '100%', maxHeight: '100%' }} />
-						Prediksi
-					</p>
-				</Col>
-				<Col lg={{ span: 12, offset: 4 }}>
-				</Col>
-			</Row>
-
-			<Row gutter={[30, 10]}>
-				<Col xs={24} sm={24} md={24} lg={12}>
-					<Row style={{ marginBottom: 8 }}>
-						<Card bordered={false} style={{ minWidth: '100%' }}>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 2 }} level={5}>Hallo! Saya PESILINTAR, Berdasarkan prediksi menggunakan
-								<span style={{ fontStyle: 'italic' }}> Machine Learning Simple Regression Linear. </span> Berikut prediksi penggunaan listrik di rumahmu.
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 10, marginBottom: 9 }} level={5}>Slope / Koefisien = {dataprediksi.slope}
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>Intercept / Konstanta ={dataprediksi.intercept}
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>y = {dataprediksi.slope} * x +{dataprediksi.intercept}
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 10, marginBottom: 4 }} level={5}>Kesimpulan:
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>1. Besar kWh listrik 30 hari yang akan datang ialah
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>{dataprediksi.TotalkWhPrediksi} kWh / Rp.
-								{parseFloat(dataRupiah).toLocaleString("en-US", { maximumFractionDigits: 0 })} ,-
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>2. Rata-rata pemakaian {dataprediksi.BataskWhharian} kWh/hari
-							</Typography.Title>
-							<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>3. Listrikmu sekarang {dataMeteran.Hasilsisa} kWh akan habis dalam {dataprediksi.waktuhabis} hari
-							</Typography.Title>
-							<p style={{ fontSize: '1' }}>
-								*)Tidak termasuk PPJ & Biaya Admin Bank (1 kWh = Rp. 1,444.7)
+			{selesai == true ?
+				<>
+					<Row>
+						<Col xs={{ span: 12 }} lg={{ span: 12 }}>
+							<p style={{ fontSize: '2vw', wordWrap: 'break-word', fontWeight: 'bold' }}>
+								<img src={imgPrediksi} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+								Prediksi
 							</p>
-						</Card>
+						</Col>
+						<Col lg={{ span: 12, offset: 4 }}>
+						</Col>
 					</Row>
-				</Col>
-				<Col lg={12} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24 }} md={{ order: 2 }}>
-					<Card bordered={false} style={{ minWidth: '100%' }}>
-						<img src={datagambar} alt="" style={{ maxWidth: '100%', maxHeight: '100%', marginTop: 0, marginBottom: 0 }} />
+
+					<Row gutter={[30, 10]}>
+						<Col xs={24} sm={24} md={24} lg={12}>
+							<Row style={{ marginBottom: 8 }}>
+								<Card bordered={false} style={{ minWidth: '100%' }}>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 4 }} level={5}>Hallo! Saya PESILINTAR, Berdasarkan prediksi menggunakan
+										<span style={{ fontStyle: 'italic' }}> Machine Learning Simple Regression Linear. </span> Berikut prediksi penggunaan listrik di rumahmu.
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 10, marginBottom: 9 }} level={5}>Slope / Koefisien = {dataprediksi.slope}
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>Intercept / Konstanta ={dataprediksi.intercept}
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>y = {dataprediksi.slope} * x +{dataprediksi.intercept}
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 10, marginBottom: 6 }} level={5}>Kesimpulan:
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>1. Besar kWh listrik 30 hari yang akan datang ialah
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>{dataprediksi.TotalkWhPrediksi} kWh / Rp.
+										{parseFloat(dataRupiah).toLocaleString("en-US", { maximumFractionDigits: 0 })} ,-
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>2. Rata-rata pemakaian {dataprediksi.BataskWhharian} kWh/hari
+									</Typography.Title>
+									<Typography.Title style={{ marginTop: 0, marginBottom: 9 }} level={5}>3. Listrikmu sekarang {dataMeteran.Hasilsisa} kWh akan habis dalam {dataprediksi.waktuhabis} hari
+									</Typography.Title>
+									<p style={{ fontSize: '1' }}>
+										*)Tidak termasuk PPJ & Biaya Admin Bank (1 kWh = Rp. 1,444.7)
+									</p>
+								</Card>
+							</Row>
+						</Col>
+						<Col lg={12} xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24 }} md={{ order: 2 }}>
+							<Card bordered={false} style={{ minWidth: '100%' }}>
+								<img src={datagambar} alt="" style={{ maxWidth: '100%', maxHeight: '100%', marginTop: 0, marginBottom: 0 }} />
+								<p align="center" style={{ fontSize: '1', marginBottom: 0 }}>
+									Hari ke-1-7 : Senin-Minggu
+								</p>
+							</Card>
+						</Col>
+						<Col xs={{ order: 1, span: 24 }} sm={{ order: 1, span: 24 }} md={{ order: 2 }}>
 						<p align="center" style={{ fontSize: '1', marginBottom: 0 }}>
-							Hari ke-1-7 : Senin-Minggu
+							*)<span style={{ fontStyle: 'italic' }}>Screenshot</span> layar untuk menyimpan
 						</p>
-					</Card>
-				</Col>
-			</Row>
+						</Col>
+					</Row>
+				</>
+				:
+				<>
+					<Row>
+						<Col xs={{ span: 12 }} lg={{ span: 12 }}>
+							<p style={{ fontSize: '2vw', wordWrap: 'break-word', fontWeight: 'bold' }}>
+								<img src={imgPrediksi} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+								Prediksi
+							</p>
+						</Col>
+						<Col lg={{ span: 12, offset: 4 }}>
+						</Col>
+					</Row>
+					<Col span={8} xs={{ span: 24 }} lg={{ span: 24 }}>
+						<Card bordered={true} style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)', textAlign: 'center' }}>
+
+							<h1>
+								Halaman masih kosong, Silahkan tekan tombol prediksi
+							</h1>
+							<Button icon={<IconFont type="icon-python" />} align="middle" type="primary" shape="round" size="large" onClick={() => {
+								setIsModalVisible(true)
+							}}>PREDIKSI
+							</Button>
+						</Card>
+					</Col>
+
+				</>
+			}
 		</>
 	);
 }

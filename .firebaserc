@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "listrik-meter"
+    "default": "listrik-meter",
+    "pesilintar-ta": "pesilintar-ta-217441001"
   }
 }
